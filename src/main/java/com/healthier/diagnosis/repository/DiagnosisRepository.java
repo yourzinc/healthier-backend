@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface DiagnosisRepository extends MongoRepository<Diagnosis, String> {
-    Optional<Diagnosis> findByTitle(@Param("title") String title);
+    Optional<Diagnosis> findById(@Param("id") String id);
 }
