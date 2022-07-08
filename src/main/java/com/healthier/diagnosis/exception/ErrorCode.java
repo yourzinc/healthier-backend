@@ -1,0 +1,20 @@
+package com.healthier.diagnosis.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.*;
+
+@Getter
+@AllArgsConstructor
+public enum ErrorCode {
+
+    /**
+     *  400 BAD_REQUEST
+     */
+    DIAGNOSIS_NOT_FOUND(BAD_REQUEST, "해당 진단 정보를 찾을 수 없습니다.");
+
+    private final HttpStatus httpStatus;
+    private final String message;
+
+}
