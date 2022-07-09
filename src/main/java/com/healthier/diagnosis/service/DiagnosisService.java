@@ -20,7 +20,8 @@ public class DiagnosisService {
                 .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
 
         return DiagnosisResponseDto.builder()
-                .diagnostic_result(diagnosis)
+                .isResult(1)
+                .diagnosticResult(diagnosis)
                 .build();
     }
 }
