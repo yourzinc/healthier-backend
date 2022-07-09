@@ -1,5 +1,6 @@
 package com.healthier.diagnosis.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.healthier.diagnosis.domain.diagnosis.Diagnosis;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,5 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class DiagnosisResponseDto {
-    private Diagnosis diagnostic_result;
+    @JsonProperty("is_result")
+    private int isResult;
+
+    @JsonProperty("diagnostic_result")
+    private Diagnosis diagnosticResult;
 }
