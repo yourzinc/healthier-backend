@@ -1,5 +1,6 @@
 package com.healthier.diagnosis.controller;
 
+import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
 import com.healthier.diagnosis.dto.QuestionRequestDto;
 import com.healthier.diagnosis.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,11 @@ public class QuestionController {
 
     @GetMapping (value = "/sleepdisorder")
     public ResponseEntity<?> getNextQuestion(@RequestBody @Valid QuestionRequestDto dto) {
-        System.out.println("=============================");
-        System.out.println(dto);
         return ResponseEntity.ok(questionService.findNextQuestion(dto));
+    }
+
+    @GetMapping (value = "/sleepdisorder/first")
+    public ResponseEntity<?> getFirstQuestion(@RequestBody @Valid FirstQuestionRequestDto dto) {
+        return ResponseEntity.ok(questionService.findFirstQuestion());
     }
 }

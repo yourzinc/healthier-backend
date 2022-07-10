@@ -1,6 +1,7 @@
 package com.healthier.diagnosis.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
 import com.healthier.diagnosis.dto.QuestionRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,10 +41,23 @@ public class QuestionControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnose/sleepdisorder").contentType(MediaType.APPLICATION_JSON)
                 .content(
                         objectMapper.writeValueAsString(new QuestionRequestDto(
-                                "62c7973f9d8ed7017f145e1b",
+                                "62ca494f705b0e3bdeefc747",
                                 2
                                 )
                         )))
+                .andExpect(status().isOk());
+
+    }
+
+    @DisplayName("첫번째 질문 조회")
+    @Test
+    void getFirstQuestion() throws Exception {
+        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
+                .answer("y")
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
     }
