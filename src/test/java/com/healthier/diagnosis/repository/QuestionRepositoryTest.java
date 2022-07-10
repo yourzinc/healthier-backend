@@ -21,7 +21,7 @@ class QuestionRepositoryTest {
     void findById(){
 
         //given
-        String id = "62c7973f9d8ed7017f145e1b";
+        String id = "62ca494f705b0e3bdeefc747";
 
         //when
         Question in_question = questionRepository.findById(id)
