@@ -26,4 +26,9 @@ public class QuestionController {
     public ResponseEntity<?> getFirstQuestion(@RequestBody @Valid FirstQuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findFirstQuestion());
     }
+
+    @PostMapping (value = "/sleepdisorder/decisive")
+    public ResponseEntity<?> getDecisiveQuestion(@RequestBody @Valid DecisiveQuestionRequestDto dto) {
+        return ResponseEntity.ok(questionService.findFirstQuestion());
+    }
 }
