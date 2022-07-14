@@ -1,5 +1,6 @@
 package com.healthier.diagnosis.controller;
 
+import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
 import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
 import com.healthier.diagnosis.dto.QuestionRequestDto;
 import com.healthier.diagnosis.service.QuestionService;
@@ -17,18 +18,18 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @GetMapping (value = "/sleepdisorder")
+    @PostMapping (value = "/sleepdisorder")
     public ResponseEntity<?> getNextQuestion(@RequestBody @Valid QuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findNextQuestion(dto));
     }
 
-    @GetMapping (value = "/sleepdisorder/first")
+    @PostMapping (value = "/sleepdisorder/first")
     public ResponseEntity<?> getFirstQuestion(@RequestBody @Valid FirstQuestionRequestDto dto) {
-        return ResponseEntity.ok(questionService.findFirstQuestion());
+        return ResponseEntity.ok(questionService.findFirstQuestion(dto));
     }
 
     @PostMapping (value = "/sleepdisorder/decisive")
     public ResponseEntity<?> getDecisiveQuestion(@RequestBody @Valid DecisiveQuestionRequestDto dto) {
-        return ResponseEntity.ok(questionService.findFirstQuestion());
+        return ResponseEntity.ok(questionService.findDecisiveQuestion(dto));
     }
 }
