@@ -15,6 +15,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +41,7 @@ public class QuestionControllerTest {
     @Test
     void getNextQuestion() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnose/sleepdisorder").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder").contentType(MediaType.APPLICATION_JSON)
                 .content(
                         objectMapper.writeValueAsString(new QuestionRequestDto(
                                 "62ca494f705b0e3bdeefc747",
@@ -49,14 +52,31 @@ public class QuestionControllerTest {
 
     }
 
-    @DisplayName("첫번째 질문 조회")
+    @DisplayName("첫번째 질문 조회_yes")
     @Test
-    void getFirstQuestion() throws Exception {
+    void getFirstQuestion_yes() throws Exception {
         FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
                 .answer("y")
                 .build();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+
+    }
+
+    @DisplayName("첫번째 질문 조회_no")
+    @Test
+    void getFirstQuestion_no() throws Exception {
+        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
+                .answer("y")
+                .scoreB(13)
+                .gender("f")
+                .birthYear(2000)
+                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 

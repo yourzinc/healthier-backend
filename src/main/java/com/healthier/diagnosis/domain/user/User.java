@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.domain.question;
+package com.healthier.diagnosis.domain.user;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -11,13 +11,12 @@ import java.util.ArrayList;
 @Builder
 @Getter
 @Data
-@Document(collection = "diagnosis_logic")
-public class Question {
-
+@Document(collection = "user")
+public class User {
     @Id
     private String id;
-    private String question;
-    private int is_multiple;
-    private ArrayList<Answer> answers;
-
+    private int birth_year;
+    private String gender;
+    private ArrayList<Integer> interests;
+    private ArrayList<UserRecord> user_records;
 }

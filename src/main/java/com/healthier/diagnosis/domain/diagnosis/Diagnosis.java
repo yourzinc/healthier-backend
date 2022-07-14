@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,12 +18,12 @@ public class Diagnosis {
     private String illustration;
     private String h1;
     private String title;
-    private String h2;
+    private ArrayList<String> h2;
     private int severity;
-    private List<String> explanation;
+    private ArrayList<String> explanation;
     private Cause cause;
-    private List<Solution> solutions;
+    private ArrayList<Solution> solutions;
     private int medicine_flag;
-    private List<Medicine> medicines;
-    private List<Treatment> treatments;
+    private ArrayList<Medicine> medicines;
+    private ArrayList<Treatment> treatments;
 }
