@@ -3,12 +3,12 @@ package com.healthier.diagnosis.domain.diagnosis;
 import lombok.Data;
 import lombok.Getter;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Getter
 @Data
 public class Cause {
     private int tag_flag;
-    private List<Tag> tags;
-    private List<String> detail;
+    private ArrayList<Tag> tags;
+    private ArrayList<String> detail;
 }

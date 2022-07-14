@@ -1,7 +1,10 @@
 package com.healthier.diagnosis.domain.user;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +17,6 @@ public class User {
     private String id;
     private int birth_year;
     private String gender;
-    private List<Integer> interests;
-    private List<UserRecord> user_records;
+    private ArrayList<Integer> interests;
+    private ArrayList<UserRecord> user_records;
 }

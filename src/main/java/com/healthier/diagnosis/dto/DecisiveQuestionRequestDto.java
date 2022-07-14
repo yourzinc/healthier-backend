@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 
 @Getter
 @Builder
@@ -25,5 +26,5 @@ public class DecisiveQuestionRequestDto {
     private int scoreB;  // 수면 위생 점수
     private String gender;
     private int birthYear;
-    private List<Integer> interests;
+    private ArrayList<Integer> interests;
 }

@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +18,6 @@ public class Question {
     private String id;
     private String question;
     private int is_multiple;
-    private List<Answer> answers;
+    private ArrayList<Answer> answers;
 
 }
