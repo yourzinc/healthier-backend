@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class DiagnosisService {
     private final DiagnosisRepository diagnosisRepository;
 
+    /**
+     * 진단결과 조회
+     */
     public DiagnosisResponseDto findDiagnosis(String id) {
         Diagnosis diagnosis = diagnosisRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
@@ -22,6 +25,33 @@ public class DiagnosisService {
         return DiagnosisResponseDto.builder()
                 .isResult(1)
                 .diagnosticResult(diagnosis)
+                .build();
+    }
+
+    /**
+     * 기간에 따른 진단결과 조회
+     */
+    public DiagnosisResponseDto findPeriod(String id, int period) {
+        Diagnosis diagnosis = diagnosisRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+
+        Diagnosis resultDiagnosis;
+
+        if (period == 1) { // temporary
+            resultDiagnosis = diagnosisRepository.findById(diagnosis.getTemporary_diagnosis())
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+        } else if (period > 1 && period < 3) { // short
+            resultDiagnosis = diagnosisRepository.findById(diagnosis.getShort_diagnosis())
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+
+        } else { // long
+            resultDiagnosis = diagnosisRepository.findById(diagnosis.getLong_diagnosis())
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+        }
+
+        return DiagnosisResponseDto.builder()
+                .isResult(1)
+                .diagnosticResult(resultDiagnosis)
                 .build();
     }
 }

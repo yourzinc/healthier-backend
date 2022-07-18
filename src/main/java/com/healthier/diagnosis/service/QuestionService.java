@@ -2,10 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.question.Answer;
 import com.healthier.diagnosis.domain.question.Question;
-import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
-import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionResponseDto;
+import com.healthier.diagnosis.dto.*;
 import com.healthier.diagnosis.exception.CustomException;
 import com.healthier.diagnosis.exception.ErrorCode;
 import com.healthier.diagnosis.repository.QuestionRepository;
@@ -71,16 +68,26 @@ public class QuestionService {
     /**
      * 결정적 질문 진단결과 조회
      */
-//    public Object findDecisiveQuestion(DecisiveQuestionRequestDto dto) {
-//        Question in_question = questionRepository.findById(dto.getQuestionId())
-//                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
-//
-//        Answer in_answer = in_question.getAnswers().stream()
-//                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
-//                .findFirst()
-//                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
-//
-//    }
+    public DiagnosisResponseDto findDecisiveQuestion(DecisiveQuestionRequestDto dto) {
+        Question in_question = questionRepository.findById(dto.getQuestionId())
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        Answer in_answer = in_question.getAnswers().stream()
+                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        String resultId = in_answer.getResult_id();
+        int period = dto.getPeriod();
+
+        // 심리적 불면증 or 수면환경 불면증 -> 기간 참조
+        if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212")) {
+            return diagnosisService.findPeriod(resultId, period);
+        }
+        else {
+            return diagnosisService.findDiagnosis(resultId);
+        }
+    }
 
     /**
      * 다음 질문 반환 메소드
@@ -93,9 +100,5 @@ public class QuestionService {
                 .isResult(0)
                 .question(question)
                 .build();
-    }
-
-    public Object findDecisiveQuestion(DecisiveQuestionRequestDto dto) {
-        return new Object();
     }
 }
