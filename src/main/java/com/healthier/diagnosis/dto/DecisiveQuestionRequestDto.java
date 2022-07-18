@@ -21,8 +21,7 @@ public class DecisiveQuestionRequestDto {
     @NotNull
     private int answerId;
 
-    private String period;
-    private String cycle;
+    private int period;
     private int scoreB;  // 수면 위생 점수
     private String gender;
     private int birthYear;

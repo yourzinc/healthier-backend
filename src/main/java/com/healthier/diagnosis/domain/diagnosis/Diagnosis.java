@@ -26,4 +26,7 @@ public class Diagnosis {
     private int medicine_flag;
     private ArrayList<Medicine> medicines;
     private ArrayList<Treatment> treatments;
+    private String temporary_diagnosis;
+    private String short_diagnosis;
+    private String long_diagnosis;
 }
