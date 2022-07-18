@@ -51,7 +51,7 @@ public class DiagnosisService {
 
         return DiagnosisResponseDto.builder()
                 .isResult(1)
-                .diagnosticResult(diagnosis)
+                .diagnosticResult(resultDiagnosis)
                 .build();
     }
 }
