@@ -19,14 +19,14 @@ class DiagnosisRepositoryTest {
     @Test
     void findById(){
         //given
-        String id = "62c795799d8ed7017f145df8";
+        String id = "62cd703fe49face142d9cffe";
 
         //when
         Diagnosis diagnosis = diagnosisRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("이런 진단명은 없습니다 환자분.."));
 
         //then
-        assertThat(diagnosis.getSeverity()).isEqualTo(2);
+        assertThat(diagnosis.getSeverity()).isEqualTo(3);
         assertThat(diagnosis.getH1()).isEqualTo("나도 모르는 새에 자꾸자꾸 깨는 당신은");
     }
 
