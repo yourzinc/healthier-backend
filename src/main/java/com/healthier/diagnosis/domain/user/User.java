@@ -15,8 +15,10 @@ import java.util.ArrayList;
 public class User {
     @Id
     private String id;
+    private String nickname;
+    private String email;
     private int birth_year;
     private String gender;
     private ArrayList<Integer> interests;
-    private ArrayList<UserRecord> user_records;
+    private ArrayList<Diagnosis> diagnosis;
 }
