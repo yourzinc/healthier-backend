@@ -18,7 +18,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @PostMapping (value = "/sleepdisorder")
+    @PostMapping (value = "")
     public ResponseEntity<?> getNextQuestion(@RequestBody @Valid QuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findNextQuestion(dto));
     }
