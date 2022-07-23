@@ -19,5 +19,5 @@ public class Question {
     private String question;
     private int is_multiple;
     private ArrayList<Answer> answers;
-
+    private int siteid;
 }
