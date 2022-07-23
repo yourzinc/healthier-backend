@@ -101,4 +101,14 @@ public class QuestionService {
                 .question(question)
                 .build();
     }
+
+    public Object findHeadacheFirstQuestion(HeadacheFirstQuestionRequestDto dto) {
+        Question question = questionRepository.findBySiteid(dto.getSiteId())
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        return QuestionResponseDto.builder()
+                .isResult(0)
+                .question(question)
+                .build();
+    }
 }

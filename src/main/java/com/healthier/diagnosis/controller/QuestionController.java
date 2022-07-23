@@ -2,6 +2,7 @@ package com.healthier.diagnosis.controller;
 
 import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
 import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
+import com.healthier.diagnosis.dto.HeadacheFirstQuestionRequestDto;
 import com.healthier.diagnosis.dto.QuestionRequestDto;
 import com.healthier.diagnosis.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @PostMapping (value = "/sleepdisorder")
+    @PostMapping
     public ResponseEntity<?> getNextQuestion(@RequestBody @Valid QuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findNextQuestion(dto));
     }
@@ -31,5 +32,10 @@ public class QuestionController {
     @PostMapping (value = "/sleepdisorder/decisive")
     public ResponseEntity<?> getDecisiveQuestion(@RequestBody @Valid DecisiveQuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findDecisiveQuestion(dto));
+    }
+
+    @PostMapping (value =  "/headache/first")
+    public ResponseEntity<?> getHeadacheFirstQuestion(@RequestBody @Valid HeadacheFirstQuestionRequestDto dto){
+        return ResponseEntity.ok(questionService.findHeadacheFirstQuestion(dto));
     }
 }
