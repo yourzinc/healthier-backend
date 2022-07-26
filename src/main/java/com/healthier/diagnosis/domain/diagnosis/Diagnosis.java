@@ -20,7 +20,7 @@ public class Diagnosis {
     private String title;
     private ArrayList<String> h2;
     private int severity;
-    private ArrayList<String> explanation;
+    private Explanation explanation;
     private Cause cause;
     private ArrayList<Solution> solutions;
     private int medicine_flag;
