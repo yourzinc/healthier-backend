@@ -111,4 +111,19 @@ public class QuestionService {
                 .question(question)
                 .build();
     }
+
+    public DiagnosisResponseDto findHeadacheDecisiveQuestion(HeadacheDecisiveQuestionRequestDto dto) {
+        Question in_question = questionRepository.findById(dto.getQuestionId())
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        Answer in_answer = in_question.getAnswers().stream()
+                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        String resultId = in_answer.getResult_id();
+        int period = dto.getPeriod();
+
+        return diagnosisService.findDiagnosis(resultId);
+    }
 }
