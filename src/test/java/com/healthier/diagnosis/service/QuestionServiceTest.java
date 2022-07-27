@@ -1,16 +1,14 @@
 package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.question.Question;
-import com.healthier.diagnosis.dto.DiagnosisResponseDto;
-import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionResponseDto;
+import com.healthier.diagnosis.dto.*;
 import com.healthier.diagnosis.repository.QuestionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -74,5 +72,97 @@ class QuestionServiceTest {
 
         //then
         assertThat(diagnosis.getDiagnosticResult().getH1()).isEqualTo("수면의 문제가 일상에 영향을 주지 않는다면");
+    }
+
+    @DisplayName("두통 결정적 진단 응답 - 약물과용 두통")
+    @Test
+    void 약물과용두통(){
+        // given
+        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+                .questionId("62d8e2fba49a42d5112f23c4")
+                .answerId(1) // 아니오
+                .period(0)
+                .cycle(0)
+                .pain_level(1)
+                .is_taking_medication(1) // 약물복용 O
+                .birthYear(2000)
+                .gender("f")
+                .interests(null)
+                .build();
+
+        // when
+        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+
+        // then
+        assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("약물 과용 두통");
+    }
+
+    @DisplayName("두통 결정적 진단 응답 - 경미한 두통")
+    @Test
+    void 경미한두통(){
+        // given
+        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+                .questionId("62d8e2fba49a42d5112f23c4")
+                .answerId(1) // 아니오
+                .period(0)
+                .cycle(0)
+                .pain_level(1) // 경미
+                .is_taking_medication(0) // 약물복용 X
+                .birthYear(2000)
+                .gender("f")
+                .interests(null)
+                .build();
+
+        // when
+        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+
+        // then
+        assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("경미한 두통");
+    }
+
+    @DisplayName("두통 결정적 진단 응답 - 중증 두통")
+    @Test
+    void 중증두통(){
+        // given
+        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+                .questionId("62d8e2fba49a42d5112f23c4")
+                .answerId(1) // 아니오
+                .period(0)
+                .cycle(0)
+                .pain_level(3) // 주의
+                .is_taking_medication(0) // 약물복용 X
+                .birthYear(2000)
+                .gender("f")
+                .interests(null)
+                .build();
+
+        // when
+        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+
+        // then
+        assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("중증 두통");
+    }
+
+    @DisplayName("두통 결정적 진단 응답 - 만성 두통")
+    @Test
+    void 만성두통(){
+        // given
+        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+                .questionId("62d8e2fba49a42d5112f23c4")
+                .answerId(1) // 아니오
+                .period(0)
+                .cycle(0)
+                .pain_level(5) // 심각
+                .is_taking_medication(0) // 약물복용 X
+                .birthYear(2000)
+                .gender("f")
+                .interests(null)
+                .build();
+
+        // when
+        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+
+        // then
+        assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("만성 두통");
     }
 }
