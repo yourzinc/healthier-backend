@@ -24,6 +24,7 @@ public class HeadacheDecisiveQuestionRequestDto {
     private int period; // 기간
     private int cycle;  // 주기
     private int pain_level; // 통증의 정도
+    private int is_taking_medication; // 약물 지속적 복용
 
     private String gender;
     private int birthYear;
