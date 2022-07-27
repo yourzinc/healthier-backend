@@ -87,7 +87,7 @@ class QuestionServiceTest {
                 .is_taking_medication(1) // 약물복용 O
                 .birthYear(2000)
                 .gender("f")
-                .interests(null)
+                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
                 .build();
 
         // when
@@ -110,7 +110,7 @@ class QuestionServiceTest {
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
-                .interests(null)
+                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
                 .build();
 
         // when
@@ -133,7 +133,7 @@ class QuestionServiceTest {
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
-                .interests(null)
+                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
                 .build();
 
         // when
@@ -156,7 +156,7 @@ class QuestionServiceTest {
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
-                .interests(null)
+                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
                 .build();
 
         // when
