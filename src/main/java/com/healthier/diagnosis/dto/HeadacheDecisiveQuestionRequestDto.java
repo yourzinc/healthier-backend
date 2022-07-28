@@ -16,14 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class DecisiveQuestionRequestDto {
+public class HeadacheDecisiveQuestionRequestDto {
     @NotNull
     private String questionId;
     @NotNull
     private int answerId;
 
-    private int period;
-    private int scoreB;  // 수면 위생 점수
+    private int period; // 기간
+    private int cycle;  // 주기
+    private int pain_level; // 통증의 정도
+    private int is_taking_medication; // 약물 지속적 복용
+
     private String gender;
     private int birthYear;
     private List<Integer> interests;
