@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping(value="/api/diagnosis/sleepdisorder")
+@RequestMapping(value="/api/diagnosis")
 @RestController
 public class DiagnosisController {
     private final DiagnosisService diagnosisService;
     private final DiagnosisRepository diagnosisRepository;
 
-    @GetMapping(value = "/results/{id}")
+    @GetMapping(value = "/sleepdisorder/results/{id}")
     public ResponseEntity<?> getDiagnosis(@PathVariable String id) {
         return ResponseEntity.ok(diagnosisService.findDiagnosis(id));
     }
+
 }
