@@ -22,7 +22,8 @@ public class User {
 
     @Data
     @Builder
-    public class Record {
+    @NoArgsConstructor
+    public static class Record {
         private String diagnosis_id;
         @CreatedDate
         private LocalDateTime is_created;
