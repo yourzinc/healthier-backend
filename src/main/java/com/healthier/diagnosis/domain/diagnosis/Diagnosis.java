@@ -29,4 +29,8 @@ public class Diagnosis {
     private String temporary_diagnosis;
     private String short_diagnosis;
     private String long_diagnosis;
+    private String MOH;
+    private String mild_headache;
+    private String warning_headache;
+    private String severe_headache;
 }
