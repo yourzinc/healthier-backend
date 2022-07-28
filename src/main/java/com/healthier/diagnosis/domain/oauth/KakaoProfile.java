@@ -1,8 +1,12 @@
 package com.healthier.diagnosis.domain.oauth;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class KakaoProfile {
@@ -12,15 +16,17 @@ public class KakaoProfile {
     public Properties properties;
     public KakaoAccount kakao_account;
 
+    @NoArgsConstructor
     @Data
-    public class Properties {
+    public static class Properties {
         public String nickname;
         public String profile_image;
         public String thumbnail_image;
     }
 
+    @NoArgsConstructor
     @Data
-    public class KakaoAccount {
+    public static class KakaoAccount {
         public Boolean profile_nickname_needs_agreement;
         public Boolean profile_image_needs_agreement;
         public Profile profile;
@@ -30,8 +36,9 @@ public class KakaoProfile {
         public Boolean is_email_verified;
         public String email;
 
+        @NoArgsConstructor
         @Data
-        public class Profile {
+        public static class Profile {
             public String nickname;
             public String thumbnail_image_url;
             public String profile_image_url;
