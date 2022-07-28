@@ -1,32 +1,38 @@
 package com.healthier.diagnosis.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthier.diagnosis.domain.question.Answer;
 import com.healthier.diagnosis.domain.question.Question;
+import com.healthier.diagnosis.domain.user.Log;
+import com.healthier.diagnosis.domain.user.Track;
 import com.healthier.diagnosis.dto.*;
 import com.healthier.diagnosis.exception.CustomException;
 import com.healthier.diagnosis.exception.ErrorCode;
+import com.healthier.diagnosis.repository.DiagnosisLogRepository;
 import com.healthier.diagnosis.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class QuestionService {
 
-    /**
-     * TODO : 진단 결과 나올 때마다 정보 로그파일에 남기기
-     */
-
     private final QuestionRepository questionRepository;
+    private final DiagnosisLogRepository logRepository;
     private final DiagnosisService diagnosisService;
+    ModelMapper modelMapper = new ModelMapper();
 
     private static final String ID = "62ca4918705b0e3bdeefc746"; // 첫번째 질문 id
 
     /**
      * 다음 질문 조회
      */
+    @Transactional(readOnly = true)
     public QuestionResponseDto findNextQuestion(QuestionRequestDto dto) {
         // Request 질문-응답 정보 조회
         Question in_question = questionRepository.findById(dto.getQuestionId())
@@ -44,6 +50,7 @@ public class QuestionService {
     /**
      * 첫번째 질문 조회
      */
+    @Transactional(readOnly = true)
     public Object findFirstQuestion(FirstQuestionRequestDto dto) {
         if(dto.getAnswer().equals("n")){
             int score = dto.getScoreB();
@@ -66,7 +73,7 @@ public class QuestionService {
     }
 
     /**
-     * 결정적 질문 진단결과 조회
+     * 결정적 질문 진단결과 조회 및 로그 저장
      */
     public DiagnosisResponseDto findDecisiveQuestion(DecisiveQuestionRequestDto dto) {
         Question in_question = questionRepository.findById(dto.getQuestionId())
@@ -79,6 +86,22 @@ public class QuestionService {
 
         String resultId = in_answer.getResult_id();
         int period = dto.getPeriod();
+
+
+        // 로그 비활성화
+//        logRepository.save(
+//                Log.builder()
+//                .diagnosis_id(resultId)
+//                .gender(dto.getGender())
+//                .is_created(LocalDateTime.now())
+//                .birthyear(dto.getBirthYear())
+//                .interests(dto.getInterests())
+//                .tracks(dto.getTracks()
+//                        .stream()
+//                        .map(c -> modelMapper.map(c, Track.class))
+//                        .collect(Collectors.toList()))
+//                .build()
+//        );
 
         // 심리적 불면증 or 수면환경 불면증 -> 기간 참조
         if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212")) {

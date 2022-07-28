@@ -1,6 +1,7 @@
 package com.healthier.diagnosis.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
 import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
 import com.healthier.diagnosis.dto.QuestionRequestDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,5 +81,23 @@ public class QuestionControllerTest {
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
+    }
+
+    @DisplayName("결정적 질문 진단결과 조회")
+    @Test
+    void getDecisiveQuestion() throws Exception {
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
+                .questionId("62ca4970705b0e3bdeefc749")
+                .answerId(1)
+                .period(3)
+                .scoreB(11)
+                .birthYear(2000)
+                .gender("f")
+                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .build();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/decisive").contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
     }
 }
