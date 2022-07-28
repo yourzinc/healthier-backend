@@ -1,9 +1,6 @@
 package com.healthier.diagnosis.controller;
 
-import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
-import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
-import com.healthier.diagnosis.dto.HeadacheFirstQuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionRequestDto;
+import com.healthier.diagnosis.dto.*;
 import com.healthier.diagnosis.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +34,10 @@ public class QuestionController {
     @PostMapping (value =  "/headache/first")
     public ResponseEntity<?> getHeadacheFirstQuestion(@RequestBody @Valid HeadacheFirstQuestionRequestDto dto){
         return ResponseEntity.ok(questionService.findHeadacheFirstQuestion(dto));
+    }
+
+    @PostMapping (value = "/headache/decisive")
+    public ResponseEntity<?> getHeadacheDecisiveQuestion(@RequestBody @Valid HeadacheDecisiveQuestionRequestDto dto) {
+        return ResponseEntity.ok(questionService.findHeadacheDecisiveQuestion(dto));
     }
 }
