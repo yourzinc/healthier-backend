@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,13 +17,17 @@ import java.util.ArrayList;
 @Data
 @Document(collection = "user")
 public class User {
+
+    @Id
+    private String id;
     private String nickname;
     private String email;
-    private ArrayList<Record> records;
+    private List<Record> records;
 
     @Data
     @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Record {
         private String diagnosis_id;
         @CreatedDate
