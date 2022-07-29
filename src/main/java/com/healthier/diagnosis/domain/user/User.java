@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 @Document(collection = "user")
 public class User {
+
     @Id
     private String id;
     private String nickname;

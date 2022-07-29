@@ -74,6 +74,23 @@ class QuestionServiceTest {
         assertThat(diagnosis.getDiagnosticResult().getH1()).isEqualTo("수면의 문제가 일상에 영향을 주지 않는다면");
     }
 
+    @DisplayName("결정적 질문 진단결과 조회")
+    @Test
+    void findDecisiveQuestion() {
+        //given
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
+                .questionId("62ca4970705b0e3bdeefc749")
+                .answerId(1)
+                .period(3)
+                .scoreB(11)
+                
+        //when
+        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findDecisiveQuestion(dto);
+
+        //then
+        assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("일주기 리듬 수면장애");
+    }
+    
     @DisplayName("두통 결정적 진단 응답 - 약물과용 두통")
     @Test
     void 약물과용두통(){
@@ -89,7 +106,6 @@ class QuestionServiceTest {
                 .gender("f")
                 .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
                 .build();
-
         // when
         DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
 

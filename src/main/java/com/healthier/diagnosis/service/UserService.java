@@ -84,7 +84,6 @@ public class UserService {
         if(records.isEmpty()) {
             throw new CustomException(ErrorCode.RECORD_NOT_FOUND);
         }
-
         return getList(user);
     }
 
