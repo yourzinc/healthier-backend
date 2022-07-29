@@ -19,7 +19,7 @@ public class UserController {
     private final JwtTokenProvider tokenProvider;
 
     // 회원가입 및 로그인
-    @GetMapping("oauth/kakao")
+    @GetMapping("/oauth/kakao")
     public ResponseEntity<?> login(@RequestParam("access_token") String accessToken) {
 
         // access token으로 회원가입 후 jwt 생성
