@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import org.springframework.util.CollectionUtils;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +66,7 @@ public class UserService {
                             User.builder()
                                     .nickname(kakaoProfile.getKakao_account().getProfile().getNickname())
                                     .email(kakaoProfile.getKakao_account().getEmail())
+                                    .records(new ArrayList<>())
                                     .build()
                     )
                 );
@@ -72,15 +75,21 @@ public class UserService {
     }
 
     // 진단 기록장 목록
-    public List<SaveDiagnosisResponseDto> getDiagnosisList(String email) {
+    public SaveDiagnosisResponseDto getDiagnosisList(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        List<User.Record> records = user.getRecords();
+
+        if(records.isEmpty()) {
+            throw new CustomException(ErrorCode.RECORD_NOT_FOUND);
+        }
 
         return getList(user);
     }
 
     // 진단 결과 저장
-    public List<SaveDiagnosisResponseDto> saveMyDiagnosis(String email, SaveDiagnosisRequestDto dto) {
+    public SaveDiagnosisResponseDto saveMyDiagnosis(String email, SaveDiagnosisRequestDto dto) {
         String id = dto.getDiagnosisId();
 
         User user = userRepository.findByEmail(email)
@@ -96,14 +105,16 @@ public class UserService {
                 .is_created(LocalDateTime.now())
                 .build();
 
-        user.getRecords().add(record);
+        List<User.Record> records = user.getRecords();
+        records.add(record);
+        userRepository.save(user);
 
-        return getList(user);
+        return getDiagnosisList(email);
     }
 
     // 진단 기록장 DTO로 변환
-    private List<SaveDiagnosisResponseDto> getList(User user) {
-        return (List<SaveDiagnosisResponseDto>) SaveDiagnosisResponseDto.builder()
+    private SaveDiagnosisResponseDto getList(User user) {
+        return SaveDiagnosisResponseDto.builder()
                 .diagnosis(user.getRecords()
                         .stream()
                         .map(c -> modelMapper.map(c, SaveDiagnosisResponseDto.MainDiagnosisDto.class))
