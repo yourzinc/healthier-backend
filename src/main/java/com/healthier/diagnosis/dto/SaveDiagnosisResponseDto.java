@@ -1,5 +1,6 @@
 package com.healthier.diagnosis.dto;
 
+import com.healthier.diagnosis.domain.user.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -16,10 +17,8 @@ public class SaveDiagnosisResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MainDiagnosisDto {
-        private String diagnosis_id;
-        private String title;
-        private int severity;
-        private LocalDateTime is_created;
+        private User.Record Record;
+        private String banner_illustration;
     }
 
 }
