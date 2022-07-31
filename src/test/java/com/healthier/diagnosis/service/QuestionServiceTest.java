@@ -83,6 +83,7 @@ class QuestionServiceTest {
                 .answerId(1)
                 .period(3)
                 .scoreB(11)
+                .build();
                 
         //when
         DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findDecisiveQuestion(dto);
