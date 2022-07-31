@@ -2,10 +2,7 @@ package com.healthier.diagnosis.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -30,4 +27,15 @@ public class HeadacheDecisiveQuestionRequestDto {
     private String gender;
     private int birthYear;
     private List<Integer> interests;
+    private List<DecisiveQuestionRequestDto.Track> tracks;   // 질문 - 답변 추적
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Track {
+        private String question_id;
+        private List<Integer> answer_id;
+    }
+
 }

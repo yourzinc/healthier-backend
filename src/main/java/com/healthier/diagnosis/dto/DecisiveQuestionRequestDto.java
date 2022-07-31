@@ -32,6 +32,6 @@ public class DecisiveQuestionRequestDto {
     @NoArgsConstructor
     public static class Track {
         private String question_id;
-        private int answer_id;
+        private List<Integer> answer_id;
     }
 }

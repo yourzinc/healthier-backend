@@ -35,4 +35,13 @@ public class User {
         private int severity;
         private String title;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ResponseRecord {
+        private Record Record;
+        private String banner_illustration;
+    }
 }
