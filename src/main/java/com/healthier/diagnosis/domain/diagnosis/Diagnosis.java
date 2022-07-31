@@ -33,4 +33,5 @@ public class Diagnosis {
     private String mild_headache;
     private String warning_headache;
     private String severe_headache;
+    private String banner_illustration;
 }
