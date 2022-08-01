@@ -109,7 +109,7 @@ public class UserService {
         if(records.isEmpty()) {
             throw new CustomException(ErrorCode.RECORD_NOT_FOUND);
         }
-        return getList(response_records);
+        return getList(user, response_records);
     }
 
     // 진단 결과 저장
@@ -137,8 +137,9 @@ public class UserService {
     }
 
     // 진단 기록장 DTO로 변환
-    private SaveDiagnosisResponseDto getList(List<User.ResponseRecord> response_records) {
+    private SaveDiagnosisResponseDto getList(User user, List<User.ResponseRecord> response_records) {
         return SaveDiagnosisResponseDto.builder()
+                .nickname(user.getNickname())
                 .diagnosis(response_records
                         .stream()
                         .map(c -> modelMapper.map(c, SaveDiagnosisResponseDto.MainDiagnosisDto.class))
