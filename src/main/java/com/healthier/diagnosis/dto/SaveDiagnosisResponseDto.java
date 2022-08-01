@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 public class SaveDiagnosisResponseDto {
+    private String nickname;
     private List<MainDiagnosisDto> diagnosis;
 
     @Getter
