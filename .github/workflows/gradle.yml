@@ -38,8 +38,6 @@ jobs:
       with:
         
         mongodb-version: '4.4'
-        entryPoint : ${{ secrets.MONGODB_HOST }}
-        mongodb-port : ${{ secrets.MONGODB_PORT }}
         mongodb-username: ${{ secrets.MONGODB_USERNAME }}
         mongodb-password: ${{ secrets.MONGODB_PASSWORD }}
         mongodb-db: ${{ secrets.MONGODB_DB }}
