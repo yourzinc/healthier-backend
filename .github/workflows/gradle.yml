@@ -31,8 +31,21 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+
+   # 3) MongoDB 
+    - name: MongoDB in GitHub Actions
+      uses: supercharge/mongodb-github-action@1.7.0
+      with:
+        
+        mongodb-version: '4.4'
+        mongodb-host : ${{ secrets.MONGODB_HOST }}
+        mongodb-port : ${{ secrets.MONGODB_PORT }}
+        mongodb-username: ${{ secrets.MONGODB_USERNAME }}
+        mongodb-password: ${{ secrets.MONGODB_PASSWORD }}
+        mongodb-db: ${{ secrets.MONGODB_DB }}
+        
     
-    # 3) Gradle 사용
+    # 4) Gradle 사용
     # 이 워크플로우는 gradle build 가 아닌 gradle clean build 수행
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
