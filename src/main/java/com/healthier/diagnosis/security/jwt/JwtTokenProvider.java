@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.healthier.diagnosis.domain.oauth.JwtProperties;
 import com.healthier.diagnosis.domain.user.User;
+import com.healthier.diagnosis.exception.CustomException;
+import com.healthier.diagnosis.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import java.util.Base64;
@@ -34,7 +36,7 @@ public class JwtTokenProvider {
 
     public String getUserEmail(String jwtToken) {
         jwtToken = jwtToken.substring(7);
-        String email = null;
+        String email = "null";
         try{
             JWTVerifier verifier =  JWT.require(Algorithm.HMAC256(JwtProperties.SECRET))
                     .withIssuer("auth0")
@@ -42,9 +44,7 @@ public class JwtTokenProvider {
             email = verifier.verify(jwtToken)
                     .getClaim("email").asString();
         } catch (JWTDecodeException ex) {
-            System.out.println("Decode Error");
-            ex.printStackTrace();
         }
-        return email;
+        throw new CustomException(ErrorCode.UN_AUTHORIZED);
     }
 }

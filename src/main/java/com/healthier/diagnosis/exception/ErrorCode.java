@@ -17,6 +17,7 @@ public enum ErrorCode {
     ANSWER_NOT_FOUND(BAD_REQUEST, "해당 응답 정보를 찾을 수 없습니다."),
     RANGE_NOT_SATISFIABLE(BAD_REQUEST, "해당 요청 정보는 범위를 벗어났습니다."),
     USER_NOT_FOUND(BAD_REQUEST, "해당 유저 정보를 찾을 수 없습니다."),
+    EMAIL_NOT_FOUND(BAD_REQUEST, "해당 유저의 이메일를 찾을 수 없습니다."),
     RECORD_NOT_FOUND(NO_CONTENT,"해당 유저의 진단 기록 정보를 찾을 수 없습니다."),
     UN_AUTHORIZED(UNAUTHORIZED, "접근 권한이 없습니다.");
 
