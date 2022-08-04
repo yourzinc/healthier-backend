@@ -24,15 +24,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
-        http.cors().and().csrf().disable();
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .cors()
+                .and()
 
-        http.authorizeRequests()
-                .antMatchers("api/diagnosis/results").authenticated()
-                .anyRequest().permitAll()
+                .authorizeRequests()
+                    .antMatchers("api/diagnosis/results").authenticated()
+                    .anyRequest().permitAll()
 
                 .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
 
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

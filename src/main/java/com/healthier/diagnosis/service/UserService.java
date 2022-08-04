@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-import static com.healthier.diagnosis.exception.ErrorCode.UN_AUTHORIZED;
-
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -64,10 +62,15 @@ public class UserService {
                     String.class
             );
         } catch (HttpClientErrorException e) {
-            throw new CustomException(UN_AUTHORIZED);
+            throw new CustomException(ErrorCode.UN_AUTHORIZED);
         }
 
         KakaoProfile kakaoProfile = objectMapper.readValue(kakaoProfileResponse.getBody(), KakaoProfile.class);
+
+        // 카카오 이메일 필수 요청
+        if(kakaoProfile.getKakao_account().getEmail() == null) {
+            throw new CustomException(ErrorCode.EMAIL_NOT_FOUND);
+        }
 
         // User 저장
         User user = userRepository.findByEmail(kakaoProfile.getKakao_account().getEmail())
