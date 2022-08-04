@@ -42,7 +42,7 @@ public class QuestionControllerTest {
     @Test
     void getNextQuestion() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose").contentType(MediaType.APPLICATION_JSON)
                 .content(
                         objectMapper.writeValueAsString(new QuestionRequestDto(
                                 "62ca494f705b0e3bdeefc747",
