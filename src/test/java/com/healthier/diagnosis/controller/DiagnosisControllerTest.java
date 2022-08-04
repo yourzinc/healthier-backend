@@ -32,7 +32,7 @@ class DiagnosisControllerTest {
     @DisplayName("진단 결과 조회")
     @Test
     void getDiagnosis() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnosis/sleepdisorder/results/62cd703fe49face142d9cffe").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnosis/results/62cd703fe49face142d9cffe").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.diagnostic_result.id").value("62cd703fe49face142d9cffe"))
                 .andExpect(status().isOk());
     }
