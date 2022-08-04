@@ -12,6 +12,7 @@ env:
   S3_BUCKET_NAME: healthier-server
   CODE_DEPLOY_APPLICATION_NAME: healthier
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: healthier-deployment-group
+  APPLICATION: ${{ secrets.APPLICATION }}
 
 permissions:
   contents: read
@@ -33,6 +34,14 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
+
+    - uses: actions/checkout@v2
+    - run: touch ./src/main/resources/application.yml
+    - run: echo "${{env.APPLICATION}}" > ./src/main/resources/application.yml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: application.yml
+        path: ./src/main/resources/application.yml
 
     # (3) Gradle build (Test 제외)
     - name: Build with Gradle
