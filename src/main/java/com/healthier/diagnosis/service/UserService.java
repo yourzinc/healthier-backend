@@ -11,11 +11,9 @@ import com.healthier.diagnosis.exception.ErrorCode;
 import com.healthier.diagnosis.repository.DiagnosisRepository;
 import com.healthier.diagnosis.repository.UserRepository;
 import com.healthier.diagnosis.security.jwt.JwtTokenProvider;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -28,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -88,7 +85,14 @@ public class UserService {
     }
 
     // 진단 기록장 목록
-    public SaveDiagnosisResponseDto getDiagnosisList(String email) {
+    public SaveDiagnosisResponseDto getDiagnosisList(String token) {
+        String email = tokenProvider.getUserEmail(token);
+
+        // 이메일 NULL 처리
+        if (email == null) {
+            throw new CustomException(ErrorCode.UN_AUTHORIZED);
+        }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -116,7 +120,14 @@ public class UserService {
     }
 
     // 진단 결과 저장
-    public SaveDiagnosisResponseDto saveMyDiagnosis(String email, SaveDiagnosisRequestDto dto) {
+    public SaveDiagnosisResponseDto saveMyDiagnosis(String token, SaveDiagnosisRequestDto dto) {
+        String email = tokenProvider.getUserEmail(token);
+
+        // 이메일 NULL 처리
+        if (email == null) {
+            throw new CustomException(ErrorCode.UN_AUTHORIZED);
+        }
+
         String id = dto.getDiagnosisId();
 
         User user = userRepository.findByEmail(email)
@@ -136,7 +147,27 @@ public class UserService {
         records.add(record);
         userRepository.save(user);
 
-        return getDiagnosisList(email);
+        // 진단 결과 보내기
+        List<User.ResponseRecord> response_records = new ArrayList<>();
+
+        // records 에 있는 record 의 question_id로 diagnosis 에서 banner_illustration 찾아 보내기
+        for (User.Record my_record : records) {
+            String diagnosis_id = my_record.getDiagnosis_id();
+            Diagnosis my_diagnosis = diagnosisRepository.findById(diagnosis_id)
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+
+            User.ResponseRecord response_record = User.ResponseRecord.builder()
+                    .Record(my_record)
+                    .banner_illustration(my_diagnosis.getBanner_illustration())
+                    .build();
+
+            response_records.add(response_record);
+        }
+
+        if(records.isEmpty()) {
+            throw new CustomException(ErrorCode.RECORD_NOT_FOUND);
+        }
+        return getList(user, response_records);
     }
 
     // 진단 기록장 DTO로 변환

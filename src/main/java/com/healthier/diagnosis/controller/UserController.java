@@ -36,13 +36,13 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/diagnosis/results")
     public ResponseEntity<?> getMyDiagnosis(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(userService.getDiagnosisList(tokenProvider.getUserEmail(token)));
+        return ResponseEntity.ok(userService.getDiagnosisList(token));
     }
 
     // 진단 결과 저장
     @PreAuthorize("isAuthenticated()")
     @PatchMapping(value = "/diagnosis/results")
     public ResponseEntity<?> saveMyDiagnosis(@RequestHeader("Authorization") String token, @RequestBody SaveDiagnosisRequestDto dto) {
-        return ResponseEntity.ok(userService.saveMyDiagnosis(tokenProvider.getUserEmail(token), dto));
+        return ResponseEntity.ok(userService.saveMyDiagnosis(token, dto));
     }
 }
