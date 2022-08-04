@@ -18,8 +18,10 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+        APPLICATION: ${{ secrets.APPLICATION }}
+
 
     steps:
     # 1) 워크플로우 실행 전 기본적으로 체크아웃
@@ -31,18 +33,17 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+        
 
-   # 3) MongoDB 
-    - name: MongoDB in GitHub Actions
-      uses: supercharge/mongodb-github-action@1.7.0
+    - uses : actions/checkout@v3
+    - run : touch ./src/main/resources/application.yml
+    - echo "${{env.APPLICATION}}" > ./src/main/resources/application.yml
+
+    - uses: actions/upload-artifact@v2
       with:
-        
-        mongodb-version: '4.4'
-        mongodb-username: ${{ secrets.MONGODB_USERNAME }}
-        mongodb-password: ${{ secrets.MONGODB_PASSWORD }}
-        mongodb-db: ${{ secrets.MONGODB_DB }}
-        
-    
+        name: application.yml
+        path: ./src/main/resources/application.yml
+
     # 4) Gradle 사용
     # 이 워크플로우는 gradle build 가 아닌 gradle clean build 수행
     - name: Build with Gradle
