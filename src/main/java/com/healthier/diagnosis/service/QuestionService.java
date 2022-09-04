@@ -152,7 +152,7 @@ public class QuestionService {
         // 약물과용 두통 확인 -> is_taking_medicine 확인
         if (resultId.equals("62e11e121549f1a6fe9f58b0")){
             return diagnosisService.checkMOH_mild_warning_severe
-                    (resultId, dto.getIs_taking_medication(), dto.getPain_level());
+                    (resultId, dto.getIs_taking_medication(), dto.getPain_level(), dto.getPeriod(), dto.getCycle());
         }
 
         return diagnosisService.findDiagnosis(resultId);
