@@ -30,22 +30,14 @@ public class QuestionService {
     private static final String ID = "62ca4918705b0e3bdeefc746"; // 첫번째 질문 id
 
     /**
-     * 다음 질문 조회
+
+     [수면장애]
+
+     1. findFirstQuestion : 첫번째 질문 조회
+     2. findDecisiveQuestion : 결정적 질문 진단결과 조회 및 로그 저장
+
      */
-    @Transactional(readOnly = true)
-    public QuestionResponseDto findNextQuestion(QuestionRequestDto dto) {
-        // Request 질문-응답 정보 조회
-        Question in_question = questionRepository.findById(dto.getQuestionId())
-                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
 
-        Answer in_answer = in_question.getAnswers().stream()
-                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
-                .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
-
-        // 다음 질문 정보 조회
-        return getQuestionResponseDto(in_answer.getNext_question_id());
-    }
 
     /**
      * 첫번째 질문 조회
@@ -112,18 +104,15 @@ public class QuestionService {
         }
     }
 
-    /**
-     * 다음 질문 반환 메소드
-     */
-    private QuestionResponseDto getQuestionResponseDto(String id) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
 
-        return QuestionResponseDto.builder()
-                .isResult(0)
-                .question(question)
-                .build();
-    }
+    /**
+
+     [두통]
+
+     1. findHeadacheFirstQuestion :  첫번째 질문 조회
+     2. findHeadacheDecisiveQuestion : 결정적 질문 진단결과 조회 및 로그 저장
+
+     */
 
     public Object findHeadacheFirstQuestion(HeadacheFirstQuestionRequestDto dto) {
         Question question = questionRepository.findBySiteid(dto.getSiteId())
@@ -155,4 +144,47 @@ public class QuestionService {
 
         return diagnosisService.findDiagnosis(resultId);
     }
+
+
+    /**
+
+     [공통]
+
+     1. findNextQuestion : 다음 질문 조회
+     2. getQuestionResponseDto : 다음 질문 반환 메소드
+
+     */
+
+
+    /**
+     * 다음 질문 조회
+     */
+    @Transactional(readOnly = true)
+    public QuestionResponseDto findNextQuestion(QuestionRequestDto dto) {
+        // Request 질문-응답 정보 조회
+        Question in_question = questionRepository.findById(dto.getQuestionId())
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        Answer in_answer = in_question.getAnswers().stream()
+                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        // 다음 질문 정보 조회
+        return getQuestionResponseDto(in_answer.getNext_question_id());
+    }
+
+    /**
+     * 다음 질문 반환 메소드
+     */
+    private QuestionResponseDto getQuestionResponseDto(String id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        return QuestionResponseDto.builder()
+                .isResult(0)
+                .question(question)
+                .build();
+    }
+
 }
