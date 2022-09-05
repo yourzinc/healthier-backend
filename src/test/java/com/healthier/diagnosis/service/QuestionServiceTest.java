@@ -121,8 +121,8 @@ class QuestionServiceTest {
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
+                .period(0) // 기간 : 상관없음
+                .cycle(0) // 주기 : 상관없음
                 .pain_level(1) // 경미
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
@@ -144,9 +144,9 @@ class QuestionServiceTest {
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
-                .pain_level(3) // 주의
+                .period(0) // 기간 : 상관없음
+                .cycle(0) // 주기 : 상관없음
+                .pain_level(3) // 통증의 정도 :  3 or 4
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
@@ -167,9 +167,9 @@ class QuestionServiceTest {
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
-                .pain_level(5) // 심각
+                .period(3) // 기간 : 한달 전(2) or 3개월 전(3)
+                .cycle(1) // 주기 : 예(1)
+                .pain_level(5) // 통증의 정도 : 상관없음 (1-5)
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
