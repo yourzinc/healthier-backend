@@ -73,7 +73,7 @@ public class DiagnosisService {
             resultDiagnosis = diagnosisRepository.findById(diagnosis.getMOH())
                     .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
         }
-        else if ((period == 1) | (period == 2) & (cycle == 1)) { // 만성
+        else if ((period == 2) | (period == 3) & (cycle == 1)) { // 만성
             resultDiagnosis = diagnosisRepository.findById(diagnosis.getSevere_headache())
                     .orElseThrow(()-> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
         }
