@@ -7,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -121,8 +121,8 @@ class QuestionServiceTest {
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
+                .period(0) // 기간 : 상관없음
+                .cycle(0) // 주기 : 상관없음
                 .pain_level(1) // 경미
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
@@ -144,9 +144,9 @@ class QuestionServiceTest {
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
-                .pain_level(3) // 주의
+                .period(0) // 기간 : 상관없음
+                .cycle(0) // 주기 : 상관없음
+                .pain_level(3) // 통증의 정도 :  3 or 4
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
@@ -164,16 +164,25 @@ class QuestionServiceTest {
     @Test
     void 만성두통(){
         // given
+        List<HeadacheDecisiveQuestionRequestDto.Track> tracks = new ArrayList<>();
+
+        List<Integer> answers = new ArrayList<>();
+        answers.add(0);
+
+        HeadacheDecisiveQuestionRequestDto.Track track = new HeadacheDecisiveQuestionRequestDto.Track("62d8e2fba49a42d5112f23c4", answers);
+        tracks.add(track);
+
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
-                .pain_level(5) // 심각
+                .period(3) // 기간 : 한달 전(2) or 3개월 전(3)
+                .cycle(1) // 주기 : 예(1)
+                .pain_level(5) // 통증의 정도 : 상관없음 (1-5)
                 .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
                 .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .tracks(tracks)
                 .build();
 
         // when
