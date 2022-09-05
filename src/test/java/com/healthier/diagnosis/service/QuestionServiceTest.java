@@ -7,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -164,6 +164,14 @@ class QuestionServiceTest {
     @Test
     void 만성두통(){
         // given
+        List<HeadacheDecisiveQuestionRequestDto.Track> tracks = new ArrayList<>();
+
+        List<Integer> answers = new ArrayList<>();
+        answers.add(0);
+
+        HeadacheDecisiveQuestionRequestDto.Track track = new HeadacheDecisiveQuestionRequestDto.Track("62d8e2fba49a42d5112f23c4", answers);
+        tracks.add(track);
+
         HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
@@ -174,6 +182,7 @@ class QuestionServiceTest {
                 .birthYear(2000)
                 .gender("f")
                 .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .tracks(tracks)
                 .build();
 
         // when

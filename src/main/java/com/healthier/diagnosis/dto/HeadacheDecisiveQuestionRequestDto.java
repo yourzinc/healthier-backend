@@ -27,7 +27,7 @@ public class HeadacheDecisiveQuestionRequestDto {
     private String gender;
     private int birthYear;
     private List<Integer> interests;
-    private List<DecisiveQuestionRequestDto.Track> tracks;   // 질문 - 답변 추적
+    private List<Track> tracks;   // 질문 - 답변 추적
 
     @Getter
     @Setter
