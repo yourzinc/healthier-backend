@@ -30,22 +30,14 @@ public class QuestionService {
     private static final String ID = "62ca4918705b0e3bdeefc746"; // 첫번째 질문 id
 
     /**
-     * 다음 질문 조회
+
+     [수면장애]
+
+     1. findFirstQuestion : 첫번째 질문 조회
+     2. findDecisiveQuestion : 결정적 질문 진단결과 조회 및 로그 저장
+
      */
-    @Transactional(readOnly = true)
-    public QuestionResponseDto findNextQuestion(QuestionRequestDto dto) {
-        // Request 질문-응답 정보 조회
-        Question in_question = questionRepository.findById(dto.getQuestionId())
-                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
 
-        Answer in_answer = in_question.getAnswers().stream()
-                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
-                .findFirst()
-                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
-
-        // 다음 질문 정보 조회
-        return getQuestionResponseDto(in_answer.getNext_question_id());
-    }
 
     /**
      * 첫번째 질문 조회
@@ -87,21 +79,20 @@ public class QuestionService {
         String resultId = in_answer.getResult_id();
         int period = dto.getPeriod();
 
-
-        // 로그 비활성화
-//        logRepository.save(
-//                Log.builder()
-//                .diagnosis_id(resultId)
-//                .gender(dto.getGender())
-//                .is_created(LocalDateTime.now())
-//                .birthyear(dto.getBirthYear())
-//                .interests(dto.getInterests())
-//                .tracks(dto.getTracks()
-//                        .stream()
-//                        .map(c -> modelMapper.map(c, Track.class))
-//                        .collect(Collectors.toList()))
-//                .build()
-//        );
+        // 진단 로그 활성화
+        logRepository.save(
+                Log.builder()
+                .diagnosis_id(resultId)
+                .gender(dto.getGender())
+                .is_created(LocalDateTime.now())
+                .birthyear(dto.getBirthYear())
+                .interests(dto.getInterests())
+                .tracks(dto.getTracks()
+                        .stream()
+                        .map(c -> modelMapper.map(c, Track.class))
+                        .collect(Collectors.toList()))
+                .build()
+        );
 
         // 심리적 불면증 or 수면환경 불면증 -> 기간 참조
         if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212")) {
@@ -112,18 +103,15 @@ public class QuestionService {
         }
     }
 
-    /**
-     * 다음 질문 반환 메소드
-     */
-    private QuestionResponseDto getQuestionResponseDto(String id) {
-        Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
 
-        return QuestionResponseDto.builder()
-                .isResult(0)
-                .question(question)
-                .build();
-    }
+    /**
+
+     [두통]
+
+     1. findHeadacheFirstQuestion :  첫번째 질문 조회
+     2. findHeadacheDecisiveQuestion : 결정적 질문 진단결과 조회 및 로그 저장
+
+     */
 
     public Object findHeadacheFirstQuestion(HeadacheFirstQuestionRequestDto dto) {
         Question question = questionRepository.findBySiteid(dto.getSiteId())
@@ -145,14 +133,71 @@ public class QuestionService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
 
         String resultId = in_answer.getResult_id();
-        int period = dto.getPeriod();
+
+        // 진단 로그 활성화
+        logRepository.save(
+                Log.builder()
+                        .diagnosis_id(resultId)
+                        .gender(dto.getGender())
+                        .is_created(LocalDateTime.now())
+                        .birthyear(dto.getBirthYear())
+                        .interests(dto.getInterests())
+                        .tracks(dto.getTracks()
+                                .stream()
+                                .map(c -> modelMapper.map(c, Track.class))
+                                .collect(Collectors.toList()))
+                        .build()
+        );
 
         // 약물과용 두통 확인 -> is_taking_medicine 확인
         if (resultId.equals("62e11e121549f1a6fe9f58b0")){
             return diagnosisService.checkMOH_mild_warning_severe
-                    (resultId, dto.getIs_taking_medication(), dto.getPain_level());
+                    (resultId, dto.getIs_taking_medication(), dto.getPain_level(), dto.getPeriod(), dto.getCycle());
         }
 
         return diagnosisService.findDiagnosis(resultId);
     }
+
+
+    /**
+
+     [공통]
+
+     1. findNextQuestion : 다음 질문 조회
+     2. getQuestionResponseDto : 다음 질문 반환 메소드
+
+     */
+
+
+    /**
+     * 다음 질문 조회
+     */
+    @Transactional(readOnly = true)
+    public QuestionResponseDto findNextQuestion(QuestionRequestDto dto) {
+        // Request 질문-응답 정보 조회
+        Question in_question = questionRepository.findById(dto.getQuestionId())
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        Answer in_answer = in_question.getAnswers().stream()
+                .filter(i -> i.getAnswer_id() == dto.getAnswerId())
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        // 다음 질문 정보 조회
+        return getQuestionResponseDto(in_answer.getNext_question_id());
+    }
+
+    /**
+     * 다음 질문 반환 메소드
+     */
+    private QuestionResponseDto getQuestionResponseDto(String id) {
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        return QuestionResponseDto.builder()
+                .isResult(0)
+                .question(question)
+                .build();
+    }
+
 }

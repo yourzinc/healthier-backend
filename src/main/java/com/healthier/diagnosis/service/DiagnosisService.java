@@ -58,16 +58,24 @@ public class DiagnosisService {
     /**
      * 두통 : 약물과용 두통, 경미, 주의, 심각 두통 진단
      */
-    public DiagnosisResponseDto checkMOH_mild_warning_severe(String id, int is_taking_medicine, int pain_level)
+    public DiagnosisResponseDto checkMOH_mild_warning_severe(String id,
+                                                             int is_taking_medicine,
+                                                             int pain_level,
+                                                             int period,
+                                                             int cycle)
     {
         Diagnosis diagnosis = diagnosisRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
 
-        Diagnosis resultDiagnosis;
+        Diagnosis resultDiagnosis = null;
 
         if (is_taking_medicine == 1) { // 약물과용 두통
             resultDiagnosis = diagnosisRepository.findById(diagnosis.getMOH())
                     .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+        }
+        else if ((period == 2) | (period == 3) & (cycle == 1)) { // 만성
+            resultDiagnosis = diagnosisRepository.findById(diagnosis.getSevere_headache())
+                    .orElseThrow(()-> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
         }
         else if ((pain_level == 1 ) | (pain_level == 2)) { // 경미
             resultDiagnosis = diagnosisRepository.findById(diagnosis.getMild_headache())
@@ -75,10 +83,6 @@ public class DiagnosisService {
         }
         else if ((pain_level == 3 ) | (pain_level == 4)) { // 주의
             resultDiagnosis = diagnosisRepository.findById(diagnosis.getWarning_headache())
-                    .orElseThrow(()-> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
-        }
-        else { // 심각
-            resultDiagnosis = diagnosisRepository.findById(diagnosis.getSevere_headache())
                     .orElseThrow(()-> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
         }
 
