@@ -36,43 +36,43 @@ class QuestionServiceTest {
         QuestionResponseDto question = questionService.findNextQuestion(dto);
 
         //then
-        assertThat(question.getQuestion().getId()).isEqualTo("62ca49bf705b0e3bdeefc74d");
+        assertThat(question.getQuestion().getId()).isEqualTo("62ca497e705b0e3bdeefc74a");
 
     }
 
-    @DisplayName("첫번째 질문 조회 - yes")
-    @Test
-    void findFirstQuestion_yes() {
-        //given
-        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
-                .answer("y")
-                .build();
-
-        //when
-        QuestionResponseDto question = (QuestionResponseDto) questionService.findFirstQuestion(dto);
-
-        //then
-        assertThat(question.getQuestion().getQuestion()).isEqualTo("자신을 가장 잘 설명하는 증상을 골라주세요");
-    }
-
-    @DisplayName("첫번째 질문 조회 - no")
-    @Test
-    void findFirstQuestion_no() {
-        //given
-        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
-                .answer("n")
-                .scoreB(3)
-                .birthYear(2000)
-                .gender("f")
-                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
-                .build();
-
-        //when
-        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findFirstQuestion(dto);
-
-        //then
-        assertThat(diagnosis.getDiagnosticResult().getH1()).isEqualTo("수면의 문제가 일상에 영향을 주지 않는다면");
-    }
+//    @DisplayName("첫번째 질문 조회 - yes")
+//    @Test
+//    void findFirstQuestion_yes() {
+//        //given
+//        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
+//                .answer("y")
+//                .build();
+//
+//        //when
+//        QuestionResponseDto question = (QuestionResponseDto) questionService.findFirstQuestion(dto);
+//
+//        //then
+//        assertThat(question.getQuestion().getQuestion()).isEqualTo("자신을 가장 잘 설명하는 증상을 골라주세요");
+//    }
+//
+//    @DisplayName("첫번째 질문 조회 - no")
+//    @Test
+//    void findFirstQuestion_no() {
+//        //given
+//        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
+//                .answer("n")
+//                .scoreB(3)
+//                .birthYear(2000)
+//                .gender("f")
+//                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+//                .build();
+//
+//        //when
+//        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findFirstQuestion(dto);
+//
+//        //then
+//        assertThat(diagnosis.getDiagnosticResult().getH1()).isEqualTo("수면의 문제가 일상에 영향을 주지 않는다면");
+//    }
 
     @DisplayName("결정적 질문 진단결과 조회")
     @Test
@@ -190,5 +190,27 @@ class QuestionServiceTest {
 
         // then
         assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("만성 두통");
+    }
+
+    // 수면장애 초기 질문
+    @DisplayName("수면장애 초기 질문")
+    @Test
+    void getSleepdisorderFirstQuestion(){
+        // when
+        Optional<Question> first_question = questionService.findFirstQuestion("sleepdisorder");
+
+        // then
+        assertThat(first_question.get().getQuestion()).isEqualTo("언제부터 잠이 안 오기 시작했나요?");
+    }
+
+    // 두통 초기 질문
+    @DisplayName("두통 초기 질문")
+    @Test
+    void getHeadacheFirstQuestion(){
+        // when
+        Optional<Question> first_question = questionService.findFirstQuestion("headache");
+
+        // then
+        assertThat(first_question.get().getQuestion()).isEqualTo("언제부터 통증이 시작되었나요?");
     }
 }
