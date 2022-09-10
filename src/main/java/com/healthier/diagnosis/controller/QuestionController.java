@@ -24,7 +24,7 @@ public class QuestionController {
     // 수면장애 초기 질문
     @GetMapping (value = "/sleepdisorder/first")
     public ResponseEntity<?> getSleepdisorderFirstQuestion() {
-        return ResponseEntity.ok(questionService.findFirstQuestion(sleepdisorder));
+        return ResponseEntity.ok(questionService.findFirstQuestion("sleepdisorder"));
     }
 
     @PostMapping (value = "/sleepdisorder/decisive")
@@ -35,7 +35,7 @@ public class QuestionController {
     // 두통 초기 질문
     @GetMapping (value =  "/headache/first")
     public ResponseEntity<?> getHeadacheFirstQuestion(){
-        return ResponseEntity.ok(questionService.findFirstQuestion(headache));
+        return ResponseEntity.ok(questionService.findFirstQuestion("headache"));
     }
 
     @PostMapping (value = "/headache/decisive")
