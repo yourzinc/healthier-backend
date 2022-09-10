@@ -21,9 +21,10 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.findNextQuestion(dto));
     }
 
-    @PostMapping (value = "/sleepdisorder/first")
-    public ResponseEntity<?> getFirstQuestion(@RequestBody @Valid FirstQuestionRequestDto dto) {
-        return ResponseEntity.ok(questionService.findFirstQuestion(dto));
+    // 수면장애 초기 질문
+    @GetMapping (value = "/sleepdisorder/first")
+    public ResponseEntity<?> getSleepdisorderFirstQuestion() {
+        return ResponseEntity.ok(questionService.findFirstQuestion(sleepdisorder));
     }
 
     @PostMapping (value = "/sleepdisorder/decisive")
@@ -31,9 +32,10 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.findDecisiveQuestion(dto));
     }
 
-    @PostMapping (value =  "/headache/first")
-    public ResponseEntity<?> getHeadacheFirstQuestion(@RequestBody @Valid HeadacheFirstQuestionRequestDto dto){
-        return ResponseEntity.ok(questionService.findHeadacheFirstQuestion(dto));
+    // 두통 초기 질문
+    @GetMapping (value =  "/headache/first")
+    public ResponseEntity<?> getHeadacheFirstQuestion(){
+        return ResponseEntity.ok(questionService.findFirstQuestion(headache));
     }
 
     @PostMapping (value = "/headache/decisive")
