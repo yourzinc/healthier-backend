@@ -197,10 +197,10 @@ class QuestionServiceTest {
     @Test
     void getSleepdisorderFirstQuestion(){
         // when
-        Optional<Question> first_question = questionService.findFirstQuestion("sleepdisorder");
+        FirstQuestionResponseDto first_question = questionService.findFirstQuestion("sleepdisorder");
 
         // then
-        assertThat(first_question.get().getQuestion()).isEqualTo("언제부터 잠이 안 오기 시작했나요?");
+        assertThat(first_question.getQuestion()).isEqualTo("언제부터 잠이 안 오기 시작했나요?");
     }
 
     // 두통 초기 질문
@@ -208,9 +208,9 @@ class QuestionServiceTest {
     @Test
     void getHeadacheFirstQuestion(){
         // when
-        Optional<Question> first_question = questionService.findFirstQuestion("headache");
+        FirstQuestionResponseDto first_question = questionService.findFirstQuestion("headache");
 
         // then
-        assertThat(first_question.get().getQuestion()).isEqualTo("언제부터 통증이 시작되었나요?");
+        assertThat(first_question.getQuestion()).isEqualTo("언제부터 통증이 시작되었나요?");
     }
 }

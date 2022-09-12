@@ -11,7 +11,6 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
 @Data
 @Document(collection = "diagnosis_logic")
 public class Question {

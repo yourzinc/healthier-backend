@@ -41,16 +41,10 @@ public class QuestionService {
 
 
     // 수면장애/두통 초기 질문 조회
-    public Optional<Question> findFirstQuestion(String type)
+    public FirstQuestionResponseDto findFirstQuestion(String type)
     {
-        Optional<Question> first_question = questionRepository.findByIsDefaultAndType(1, type);
-
-//        System.out.println(first_question);
-
-//        ModelMapper modelMapper = new ModelMapper();
-//        FirstQuestionResponseDto.builder().question(modelMapper.map(first_question, Question.class)).build();
-
-        return first_question;
+        Question first_question = questionRepository.findOneByIsDefaultAndType(1, type).orElseThrow(IllegalArgumentException::new);
+        return modelMapper.map(first_question, FirstQuestionResponseDto.class);
     }
 
 

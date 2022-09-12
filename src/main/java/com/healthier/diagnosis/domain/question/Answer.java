@@ -2,8 +2,8 @@ package com.healthier.diagnosis.domain.question;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
 @Data
 public class Answer {
     private int answer_id;
