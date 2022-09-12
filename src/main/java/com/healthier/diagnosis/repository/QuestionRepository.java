@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface QuestionRepository extends MongoRepository<Question, String> {
     Optional<Question> findById(@Param("id") String id);
     Optional<Question> findBySiteid(@Param("siteid") int site_id);
-    Optional<Question> findByIsDefaultAndType(int is_default,String type);
+    Optional<Question> findOneByIsDefaultAndType(int is_default,String type);
 }
