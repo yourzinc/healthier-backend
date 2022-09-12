@@ -17,6 +17,7 @@ public class FirstQuestionResponseDto {
     private int isMultiple;
     private ArrayList<Answer> answers;
 
+    private int isLastDefault;
 }
 
 @Getter

@@ -27,4 +27,6 @@ public class Question {
     @Field(name = "is_default")
     private int isDefault;
     private String type;
+    @Field(name = "is_last_default")
+    private int isLastDefault;
 }
