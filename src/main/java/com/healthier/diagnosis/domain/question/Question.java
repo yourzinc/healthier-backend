@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,7 +24,8 @@ public class Question {
     @Field(name = "is_multiple")
     private int isMultiple;
     private ArrayList<Answer> answers;
-    private int siteid;
+    @Field(name = "site_id")
+    private int siteId;
 
     @Field(name = "is_default")
     private int isDefault;
