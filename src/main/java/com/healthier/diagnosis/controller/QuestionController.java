@@ -38,6 +38,12 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.findFirstQuestion("headache"));
     }
 
+    // 두통 마지막 초기 질문
+    @PostMapping(value = "/headache/last-default")
+    public ResponseEntity<?> getHeadacheDefaultQuestionAfter(@RequestBody @Valid HeadacheDefaultQuestionAfterRequestDto dto){
+        return ResponseEntity.ok(questionService.findHeadacheDefaultQuestionAfter(dto));
+    }
+
     @PostMapping (value = "/headache/decisive")
     public ResponseEntity<?> getHeadacheDecisiveQuestion(@RequestBody @Valid HeadacheDecisiveQuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findHeadacheDecisiveQuestion(dto));

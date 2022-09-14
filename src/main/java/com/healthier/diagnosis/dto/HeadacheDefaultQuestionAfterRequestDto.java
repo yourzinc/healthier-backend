@@ -8,14 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class HeadacheFirstQuestionRequestDto {
+public class HeadacheDefaultQuestionAfterRequestDto {
     @NotNull
     private int siteId;
 }
