@@ -29,6 +29,32 @@ public class DiagnosisService {
     }
 
     /**
+     * 수면장애 : 수면장애가 아닌 경우 수면위생점수로 진단
+     */
+    public String findSleepdisorderWithSHI(String id, int SHI)
+    {
+        Diagnosis diagnosis = diagnosisRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+
+        String result_diagnosis_id;
+
+        if (SHI < 0 || SHI > 17) {
+        throw new CustomException(ErrorCode.RANGE_NOT_SATISFIABLE);
+         }
+        if (SHI <= 6){ // 수면 장애 아님
+            result_diagnosis_id = diagnosis.getNot_sleepdisorder();
+        }
+        else if(SHI >= 11) { // 수면습관 경고
+            result_diagnosis_id = diagnosis.getSleep_warning();
+        }
+        else { // 수면습관 주의
+            result_diagnosis_id = diagnosis.getSleep_caution();
+        }
+
+        return result_diagnosis_id;
+    }
+
+    /**
      * 수면장애 : 불면증에서 기간에 따른 진단
      */
     public String findInsomniaPeriod(String id, int period) {

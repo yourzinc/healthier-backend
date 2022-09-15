@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class QuestionService {
 
 
     /**
-     * 첫번째 질문 조회
+     * 수면장애 : 수면의 문제가 일상생활에 지장을 주나요? 에 no 라고 응답한 경우, 수면위생점수로 진단
      */
     @Transactional(readOnly = true)
     public Object findFirstQuestion(FirstQuestionRequestDto dto) {
@@ -84,11 +85,22 @@ public class QuestionService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
 
         String resultId = in_answer.getResult_id();
-        int period = dto.getPeriod();
+
+        // 수면장애가 아닌 경우 -> 수면위생점수로 결정하기
+        if (resultId.equals("6322d088eaac10034c60903d")){
+
+            // 수면위생점수 계산
+            int SHI = getSHI(dto.getTracks());
+            resultId = diagnosisService.findSleepdisorderWithSHI(resultId, SHI);
+        }
 
         // 심리적 불면증 or 수면환경 불면증 -> 기간으로 결정하기
-        if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212"))
-            resultId =  diagnosisService.findInsomniaPeriod(resultId, period);
+        else if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212")) {
+
+            // 기간 확인
+            int period = getPeriod(dto.getTracks());
+            resultId = diagnosisService.findInsomniaPeriod(resultId, period);
+        }
 
         // 진단 로그 활성화
         if (dto.getTracks() != null) {
@@ -108,6 +120,36 @@ public class QuestionService {
         }
 
         return diagnosisService.findDiagnosis(resultId);
+    }
+
+    /**
+     *  수면장애 : 수면위생점수 SHI 계산
+     */
+    private int getSHI(List<Track> tracks) {
+        int SHI = 0;
+        // tracks 에서 question - answer 로 수면 위생 점수 계산
+        // 1. 언제부터 잠이 안오기 시작했나요? - 631ad53675ce6608eb91f75c
+        // 0. 일주일전 1. 2주전 2. 한달 전 3. 3개월 전
+
+        // 2. 주기) 일주일에 몇 번 정도 잠을 못 주무시나요? - 631ad4f175ce6608eb91f75b
+        // 0. 주 1~2회 1. 주 3회 이상
+
+        return SHI;
+    }
+
+    /**
+     *  수면장애 : 주기 점수
+     *
+     *  ID : 631ad53675ce6608eb91f75c
+     *  Q) 언제부터 잠이 안오기 시작했나요?
+     *  A) 0. 일주일전 1. 2주전 2. 한달 전 3. 3개월 전
+     */
+
+    private int getPeriod(List<Track> tracks) {
+        return tracks.stream()
+                .filter(track -> track.getQuestion_id() == "631ad53675ce6608eb91f75c")
+                .findFirst()
+                .get().getAnswer_id().get(0);
     }
 
 
