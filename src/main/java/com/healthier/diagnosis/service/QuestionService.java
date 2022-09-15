@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -37,6 +38,14 @@ public class QuestionService {
      2. findDecisiveQuestion : 결정적 질문 진단결과 조회 및 로그 저장
 
      */
+
+
+    // 수면장애/두통 초기 질문 조회
+    public FirstQuestionResponseDto findFirstQuestion(String type)
+    {
+        Question first_question = questionRepository.findOneByIsDefaultAndType(1, type).orElseThrow(IllegalArgumentException::new);
+        return modelMapper.map(first_question, FirstQuestionResponseDto.class);
+    }
 
 
     /**
@@ -79,20 +88,22 @@ public class QuestionService {
         String resultId = in_answer.getResult_id();
         int period = dto.getPeriod();
 
-        // 진단 로그 활성화
-        logRepository.save(
-                Log.builder()
-                .diagnosis_id(resultId)
-                .gender(dto.getGender())
-                .is_created(LocalDateTime.now())
-                .birthyear(dto.getBirthYear())
-                .interests(dto.getInterests())
-                .tracks(dto.getTracks()
-                        .stream()
-                        .map(c -> modelMapper.map(c, Track.class))
-                        .collect(Collectors.toList()))
-                .build()
-        );
+        if (dto.getTracks() != null) {
+            // 진단 로그 활성화
+            logRepository.save(
+                    Log.builder()
+                            .diagnosis_id(resultId)
+                            .gender(dto.getGender())
+                            .is_created(LocalDateTime.now())
+                            .birthyear(dto.getBirthYear())
+                            .interests(dto.getInterests())
+                            .tracks(dto.getTracks()
+                                    .stream()
+                                    .map(c -> modelMapper.map(c, Track.class))
+                                    .collect(Collectors.toList()))
+                            .build()
+            );
+        }
 
         // 심리적 불면증 or 수면환경 불면증 -> 기간 참조
         if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212")) {
@@ -134,20 +145,22 @@ public class QuestionService {
 
         String resultId = in_answer.getResult_id();
 
-        // 진단 로그 활성화
-        logRepository.save(
-                Log.builder()
-                        .diagnosis_id(resultId)
-                        .gender(dto.getGender())
-                        .is_created(LocalDateTime.now())
-                        .birthyear(dto.getBirthYear())
-                        .interests(dto.getInterests())
-                        .tracks(dto.getTracks()
-                                .stream()
-                                .map(c -> modelMapper.map(c, Track.class))
-                                .collect(Collectors.toList()))
-                        .build()
-        );
+        if (dto.getTracks() != null) {
+            // 진단 로그 활성화
+            logRepository.save(
+                    Log.builder()
+                            .diagnosis_id(resultId)
+                            .gender(dto.getGender())
+                            .is_created(LocalDateTime.now())
+                            .birthyear(dto.getBirthYear())
+                            .interests(dto.getInterests())
+                            .tracks(dto.getTracks()
+                                    .stream()
+                                    .map(c -> modelMapper.map(c, Track.class))
+                                    .collect(Collectors.toList()))
+                            .build()
+            );
+        }
 
         // 약물과용 두통 확인 -> is_taking_medicine 확인
         if (resultId.equals("62e11e121549f1a6fe9f58b0")){
