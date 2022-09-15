@@ -29,7 +29,7 @@ public class DiagnosisService {
     }
 
     /**
-     * 기간에 따른 진단결과 조회 (result id 로 반환)
+     * 수면장애 : 불면증에서 기간에 따른 진단
      */
     public String findInsomniaPeriod(String id, int period) {
         Diagnosis diagnosis = diagnosisRepository.findById(id)
