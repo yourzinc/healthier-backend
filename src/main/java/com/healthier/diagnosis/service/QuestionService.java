@@ -1,6 +1,5 @@
 package com.healthier.diagnosis.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.healthier.diagnosis.domain.question.Answer;
 import com.healthier.diagnosis.domain.question.Question;
 import com.healthier.diagnosis.domain.user.Log;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -41,10 +39,10 @@ public class QuestionService {
 
 
     // 수면장애/두통 초기 질문 조회
-    public FirstQuestionResponseDto findFirstQuestion(String type)
+    public QuestionDto findFirstQuestion(String type)
     {
         Question first_question = questionRepository.findOneByIsDefaultAndType(1, type).orElseThrow(IllegalArgumentException::new);
-        return modelMapper.map(first_question, FirstQuestionResponseDto.class);
+        return modelMapper.map(first_question, QuestionDto.class);
     }
 
 
@@ -119,18 +117,22 @@ public class QuestionService {
 
      [두통]
 
-     1. findHeadacheFirstQuestion :  첫번째 질문 조회
+     1. findHeadacheDefaultQuestionAfter :  초기 질문 이후 이어지는 질문 조회
      2. findHeadacheDecisiveQuestion : 결정적 질문 진단결과 조회 및 로그 저장
 
      */
 
-    public Object findHeadacheFirstQuestion(HeadacheFirstQuestionRequestDto dto) {
-        Question question = questionRepository.findBySiteid(dto.getSiteId())
+    public QuestionResponseDto findHeadacheDefaultQuestionAfter(HeadacheDefaultQuestionAfterRequestDto dto) {
+        Question question = questionRepository.findBySiteId(dto.getSiteId())
                 .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
+
+        modelMapper.typeMap(Question.class, QuestionDto.class).addMappings(mapper -> {
+           mapper.map(Question::getAnswers, QuestionDto::setAnswers);
+        });
 
         return QuestionResponseDto.builder()
                 .isResult(0)
-                .question(question)
+                .question(modelMapper.map(question, QuestionDto.class))
                 .build();
     }
 
@@ -209,7 +211,7 @@ public class QuestionService {
 
         return QuestionResponseDto.builder()
                 .isResult(0)
-                .question(question)
+                .question(modelMapper.map(question, QuestionDto.class))
                 .build();
     }
 

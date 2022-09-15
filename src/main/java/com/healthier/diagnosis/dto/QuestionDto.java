@@ -2,28 +2,23 @@ package com.healthier.diagnosis.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.healthier.diagnosis.domain.question.Answer;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.ArrayList;
 
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class FirstQuestionResponseDto {
-
+public class QuestionDto {
     private String id;
     private String question;
 
     private int isMultiple;
-    private ArrayList<Answer> answers;
+    private ArrayList<AnswerDto> answers;
 
-}
-
-@Getter
-@Setter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-class Answer {
-    private int answer_id;
-    private String answer;
-    private int isDecisive;  // 1이면 진단 결과 도출
+    private int isLastDefault;
 }

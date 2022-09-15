@@ -197,7 +197,7 @@ class QuestionServiceTest {
     @Test
     void getSleepdisorderFirstQuestion(){
         // when
-        FirstQuestionResponseDto first_question = questionService.findFirstQuestion("sleepdisorder");
+        QuestionDto first_question = questionService.findFirstQuestion("sleepdisorder");
 
         // then
         assertThat(first_question.getQuestion()).isEqualTo("언제부터 잠이 안 오기 시작했나요?");
@@ -208,9 +208,21 @@ class QuestionServiceTest {
     @Test
     void getHeadacheFirstQuestion(){
         // when
-        FirstQuestionResponseDto first_question = questionService.findFirstQuestion("headache");
+        QuestionDto first_question = questionService.findFirstQuestion("headache");
 
         // then
         assertThat(first_question.getQuestion()).isEqualTo("언제부터 통증이 시작되었나요?");
+    }
+
+    // 두통 마지막 초기 질문 응답
+    @DisplayName("두통 마지막 초기 질문 응답")
+    @Test
+    void findHeadacheDefaultQuestionAfter(){
+        QuestionResponseDto default_question_after = questionService.findHeadacheDefaultQuestionAfter(
+                HeadacheDefaultQuestionAfterRequestDto.builder()
+                        .siteId(1) // 진단 부위 (1) : 관자놀이
+                        .build());
+
+        assertThat(default_question_after.getQuestion().getQuestion()).isEqualTo("맥박이 느껴지는 것 같은 박동성 통증이 느껴지나요?");
     }
 }
