@@ -138,7 +138,7 @@ public class QuestionService {
     }
 
     /**
-     *  수면장애 : 주기 점수
+     *  수면장애 : 기간 점수
      *
      *  ID : 631ad53675ce6608eb91f75c
      *  Q) 언제부터 잠이 안오기 시작했나요?
