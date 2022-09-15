@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface QuestionRepository extends MongoRepository<Question, String> {
     Optional<Question> findById(@Param("id") String id);
-    Optional<Question> findBySiteid(@Param("siteid") int site_id);
+    Optional<Question> findBySiteId(@Param("siteId") int site_id);
     Optional<Question> findOneByIsDefaultAndType(int is_default,String type);
 }
