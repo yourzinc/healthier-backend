@@ -86,8 +86,12 @@ public class QuestionService {
         String resultId = in_answer.getResult_id();
         int period = dto.getPeriod();
 
+        // 심리적 불면증 or 수면환경 불면증 -> 기간으로 결정하기
+        if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212"))
+            resultId =  diagnosisService.findInsomniaPeriod(resultId, period);
+
+        // 진단 로그 활성화
         if (dto.getTracks() != null) {
-            // 진단 로그 활성화
             logRepository.save(
                     Log.builder()
                             .diagnosis_id(resultId)
@@ -103,13 +107,7 @@ public class QuestionService {
             );
         }
 
-        // 심리적 불면증 or 수면환경 불면증 -> 기간 참조
-        if (resultId.equals("62d17692f68f2b673e721211") || resultId.equals("62d176ecf68f2b673e721212")) {
-            return diagnosisService.findPeriod(resultId, period);
-        }
-        else {
-            return diagnosisService.findDiagnosis(resultId);
-        }
+        return diagnosisService.findDiagnosis(resultId);
     }
 
 

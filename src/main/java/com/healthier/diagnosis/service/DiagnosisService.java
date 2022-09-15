@@ -29,30 +29,27 @@ public class DiagnosisService {
     }
 
     /**
-     * 기간에 따른 진단결과 조회
+     * 기간에 따른 진단결과 조회 (result id 로 반환)
      */
-    public DiagnosisResponseDto findPeriod(String id, int period) {
+    public String findInsomniaPeriod(String id, int period) {
         Diagnosis diagnosis = diagnosisRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
 
-        Diagnosis resultDiagnosis;
+        String result_diagnosis_id;
 
         if (period == 1) { // temporary
-            resultDiagnosis = diagnosisRepository.findById(diagnosis.getTemporary_diagnosis())
-                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+            result_diagnosis_id = diagnosisRepository.findById(diagnosis.getTemporary_diagnosis())
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND)).getId();
         } else if (period > 1 && period < 3) { // short
-            resultDiagnosis = diagnosisRepository.findById(diagnosis.getShort_diagnosis())
-                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+            result_diagnosis_id = diagnosisRepository.findById(diagnosis.getShort_diagnosis())
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND)).getId();
 
         } else { // long
-            resultDiagnosis = diagnosisRepository.findById(diagnosis.getLong_diagnosis())
-                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+            result_diagnosis_id = diagnosisRepository.findById(diagnosis.getLong_diagnosis())
+                    .orElseThrow(() -> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND)).getId();
         }
 
-        return DiagnosisResponseDto.builder()
-                .isResult(1)
-                .diagnosticResult(resultDiagnosis)
-                .build();
+        return result_diagnosis_id;
     }
 
     /**
