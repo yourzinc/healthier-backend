@@ -76,7 +76,7 @@ public class QuestionService {
 //    ===================== 수면장애 첫번째 진단 응답 삭제 =====================
 
     /**
-     * 결정적 질문 진단결과 조회 및 로그 저장
+     * 수면장애 : 결정적 질문 진단결과 조회 및 로그 저장
      */
     public DiagnosisResponseDto findDecisiveQuestion(DecisiveQuestionRequestDto dto) {
         Question in_question = questionRepository.findById(dto.getQuestionId())
@@ -178,7 +178,7 @@ public class QuestionService {
 
     private int getPeriod(List<Track> tracks) {
         return tracks.stream()
-                .filter(track -> track.getQuestion_id() == "631ad53675ce6608eb91f75c")
+                .filter(track -> track.getQuestion_id().equals("631ad53675ce6608eb91f75c"))
                 .findFirst()
                 .get().getAnswer_id().get(0);
     }
@@ -207,7 +207,7 @@ public class QuestionService {
                 .build();
     }
 
-    public DiagnosisResponseDto findHeadacheDecisiveQuestion(HeadacheDecisiveQuestionRequestDto dto) {
+    public DiagnosisResponseDto findHeadacheDecisiveQuestion(DecisiveQuestionRequestDto dto) {
         Question in_question = questionRepository.findById(dto.getQuestionId())
                 .orElseThrow(() -> new CustomException(ErrorCode.QUESTION_NOT_FOUND));
 
@@ -217,6 +217,17 @@ public class QuestionService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
 
         String resultId = in_answer.getResult_id();
+
+        // 약물과용 두통 확인 -> is_taking_medicine 확인
+        if (resultId.equals("62e11e121549f1a6fe9f58b0")){
+
+            int is_taking_medication = get_is_taking_medication(dto.getTracks());
+            int pain_level = get_pain_level(dto.getTracks());
+            int period = get_period(dto.getTracks());
+            int cycle = get_cycle(dto.getTracks());
+
+            resultId = diagnosisService.checkMOH_mild_warning_severe(resultId, is_taking_medication, pain_level, period, cycle);
+        }
 
         if (dto.getTracks() != null) {
             // 진단 로그 활성화
@@ -235,15 +246,64 @@ public class QuestionService {
             );
         }
 
-        // 약물과용 두통 확인 -> is_taking_medicine 확인
-        if (resultId.equals("62e11e121549f1a6fe9f58b0")){
-            return diagnosisService.checkMOH_mild_warning_severe
-                    (resultId, dto.getIs_taking_medication(), dto.getPain_level(), dto.getPeriod(), dto.getCycle());
-        }
-
         return diagnosisService.findDiagnosis(resultId);
     }
 
+    /**
+     *  두통 : 약물 복용 여부
+     *
+     *  ID : 631adabc75ce6608eb91f75e
+     *  Q) 한 달에 15일 이상 진통제 등의 약물을 지속적으로 복용했나요?
+     *  A) 0. 예  1. 아니오
+     */
+    private int get_is_taking_medication(List<Track> tracks) {
+        return tracks.stream()
+                .filter(track -> track.getQuestion_id().equals("631adabc75ce6608eb91f75e"))
+                .findFirst()
+                .get().getAnswer_id().get(0);
+    }
+
+    /**
+     *  두통 : 통증
+     *
+     *  ID : 631adaf175ce6608eb91f75f
+     *  Q) 통증의 정도가 어떻게 되나요?
+     *  A) 1, 2, 3, 4, 5
+     */
+    private int get_pain_level(List<Track> tracks) {
+        return tracks.stream()
+                .filter(track -> track.getQuestion_id().equals("631adaf175ce6608eb91f75f"))
+                .findFirst()
+                .get().getAnswer_id().get(0)+1;
+    }
+
+    /**
+     *  두통 : 주기
+     *
+     *  ID : 631adb1775ce6608eb91f760
+     *  Q) 1달에 15일 이상 두통 증상이 있나요?
+     *  A) 0. 예  1. 아니오
+     */
+    private int get_cycle(List<Track> tracks) {
+        return tracks.stream()
+                .filter(track -> track.getQuestion_id().equals("631adb1775ce6608eb91f760"))
+                .findFirst()
+                .get().getAnswer_id().get(0);
+    }
+
+    /**
+     *  두통 : 시기
+     *
+     *  ID : 631adb3775ce6608eb91f761
+     *  Q) 언제부터 통증이 시작되었나요?
+     *  A) 0. 일주일 이내  1. 2주 전  2. 한달 전  3. 3개월 전
+     */
+    private int get_period(List<Track> tracks) {
+        return tracks.stream()
+                .filter(track -> track.getQuestion_id().equals("631adb3775ce6608eb91f761"))
+                .findFirst()
+                .get().getAnswer_id().get(0);
+    }
 
     /**
 
