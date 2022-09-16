@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -239,4 +240,32 @@ class QuestionServiceTest {
         // then
         assertThat(questionService.getSHI(tracks)).isEqualTo(6);
     }
+
+    // 수면장애 결정적 질문 진단결과 조회 및 로그 저장
+    @DisplayName("수면장애 결정적 질문 응답")
+    @Test
+    void testFindDecisiveQuestion(){
+        // given
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
+                .questionId("631ad32875ce6608eb91f755")
+                .answerId(1)
+                .gender("f")
+                .birthYear(2000)
+                .interests(Arrays.asList(0))
+                .tracks(Arrays.asList(
+                        Track.builder().question_id("631ad53675ce6608eb91f75c").answer_id(Arrays.asList(1)).build(),
+                        Track.builder().question_id("631ad4f175ce6608eb91f75b").answer_id(Arrays.asList(1)).build(),
+                        Track.builder().question_id("631ad4c675ce6608eb91f75a").answer_id(Arrays.asList(1)).build(),
+                        Track.builder().question_id("631ad45475ce6608eb91f759").answer_id(Arrays.asList(1)).build(),
+                        Track.builder().question_id("631ad41075ce6608eb91f757").answer_id(Arrays.asList(1)).build(), // 5,6,7 로 바꾸면 "수면습관 주의"
+                        Track.builder().question_id("631ad32875ce6608eb91f755").answer_id(Arrays.asList(1)).build()
+                )).build();
+
+        // when
+        DiagnosisResponseDto diagnosisResponseDto = questionService.findDecisiveQuestion(dto);
+
+        // then
+        assertThat(diagnosisResponseDto.getDiagnosticResult().getTitle()).isEqualTo("수면장애가 아니에요");
+    }
+
 }
