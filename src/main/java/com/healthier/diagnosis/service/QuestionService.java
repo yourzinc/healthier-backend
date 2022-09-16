@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -125,16 +126,40 @@ public class QuestionService {
     /**
      *  수면장애 : 수면위생점수 SHI 계산
      */
-    private int getSHI(List<Track> tracks) {
-        int SHI = 0;
+    int getSHI(List<Track> tracks) {
+        AtomicInteger SHI = new AtomicInteger();
         // tracks 에서 question - answer 로 수면 위생 점수 계산
-        // 1. 언제부터 잠이 안오기 시작했나요? - 631ad53675ce6608eb91f75c
-        // 0. 일주일전 1. 2주전 2. 한달 전 3. 3개월 전
 
-        // 2. 주기) 일주일에 몇 번 정도 잠을 못 주무시나요? - 631ad4f175ce6608eb91f75b
-        // 0. 주 1~2회 1. 주 3회 이상
+        // 평소 알코올 섭취량? 631ad4c675ce6608eb91f75a
+        SHI.addAndGet(tracks.stream()
+                .filter(track -> track.getQuestion_id() == "631ad4c675ce6608eb91f75a")
+                .findFirst()
+                .get().getAnswer_id().get(0));
 
-        return SHI;
+        System.out.println("SHI : "+ SHI.get());
+
+        // 평소 카페인 섭취량? 631ad45475ce6608eb91f759
+        SHI.addAndGet(tracks.stream()
+                .filter(track -> track.getQuestion_id() == "631ad45475ce6608eb91f759")
+                .findFirst()
+                .get().getAnswer_id().get(0));
+
+        System.out.println("SHI : "+ SHI.get());
+
+        // 자신에게 해당하는 것을 고르세요. 631ad41075ce6608eb91f757
+        tracks.stream()
+                .filter(track -> track.getQuestion_id() == "631ad41075ce6608eb91f757")
+                .findFirst()
+                .get()
+                .getAnswer_id()
+                .stream().forEach(answer -> {
+                    if ( answer < 4 ) SHI.addAndGet(1); // 0, 1, 2, 3 -> 1점
+                    else SHI.addAndGet(2); // 4, 5, 6 -> 2점
+                });
+
+        System.out.println("SHI : "+ SHI.get());
+
+        return SHI.get();
     }
 
     /**
