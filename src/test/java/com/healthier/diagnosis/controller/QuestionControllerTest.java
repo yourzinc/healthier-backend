@@ -89,8 +89,6 @@ public class QuestionControllerTest {
         DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
                 .questionId("62ca4970705b0e3bdeefc749")
                 .answerId(1)
-                .period(3)
-                .scoreB(11)
                 .birthYear(2000)
                 .gender("f")
                 .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
