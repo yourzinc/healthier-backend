@@ -1,21 +1,13 @@
 package com.healthier.diagnosis.service;
 
-import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
 import com.healthier.diagnosis.dto.DiagnosisResponseDto;
-import com.healthier.diagnosis.domain.diagnosis.Diagnosis;
-import com.healthier.diagnosis.dto.QuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionResponseDto;
 import com.healthier.diagnosis.repository.DiagnosisRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DiagnosisServiceTest {
@@ -44,14 +36,15 @@ class DiagnosisServiceTest {
     @Test
     void findPeriod() {
         //given
-        String id = "62d17692f68f2b673e721211";
-        int period = 2;
+        String id = "62d17692f68f2b673e721211"; // 심리적 불면증
+        // String id = "62d176ecf68f2b673e721212"; // 수면 환경 불면증
+
+        int period = 2; // 1이면 일시적 불면증, 2이면 단기 불면증, 3이면 만성 불면증
 
         //when
-        DiagnosisResponseDto diagnosis = diagnosisService.findPeriod(id, period);
+        DiagnosisResponseDto diagnosis = diagnosisService.findDiagnosis(diagnosisService.findInsomniaPeriod(id, period));
 
         //then
         assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("단기 불면증");
-
     }
 }
