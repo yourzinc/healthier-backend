@@ -48,7 +48,7 @@ public class QuestionController {
 
     // 두통 결정적 진단 응답
     @PostMapping (value = "/headache/decisive")
-    public ResponseEntity<?> getHeadacheDecisiveQuestion(@RequestBody @Valid HeadacheDecisiveQuestionRequestDto dto) {
+    public ResponseEntity<?> getHeadacheDecisiveQuestion(@RequestBody @Valid DecisiveQuestionRequestDto dto) {
         return ResponseEntity.ok(questionService.findHeadacheDecisiveQuestion(dto));
     }
 }
