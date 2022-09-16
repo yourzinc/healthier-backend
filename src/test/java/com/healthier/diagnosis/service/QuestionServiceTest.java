@@ -1,6 +1,7 @@
 package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.question.Question;
+import com.healthier.diagnosis.domain.user.Track;
 import com.healthier.diagnosis.dto.*;
 import com.healthier.diagnosis.repository.QuestionRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -222,5 +223,20 @@ class QuestionServiceTest {
                         .build());
 
         assertThat(default_question_after.getQuestion().getQuestion()).isEqualTo("맥박이 느껴지는 것 같은 박동성 통증이 느껴지나요?");
+    }
+
+    // 수면장애 수면위생점수 SHI 계산
+    @DisplayName("수면장애 수면위생점수 SHI 계산")
+    @Test
+    void testGetSHI(){
+        // given
+        List<Track> tracks = new ArrayList<Track>();
+
+        tracks.add(Track.builder().question_id("631ad4c675ce6608eb91f75a").answer_id(Arrays.asList(1)).build()); // 1점
+        tracks.add(Track.builder().question_id("631ad45475ce6608eb91f759").answer_id(Arrays.asList(1)).build()); // 1점
+        tracks.add(Track.builder().question_id("631ad41075ce6608eb91f757").answer_id(Arrays.asList(0,1,2,3)).build()); // 4점
+
+        // then
+        assertThat(questionService.getSHI(tracks)).isEqualTo(6);
     }
 }
