@@ -128,27 +128,33 @@ public class QuestionService {
      */
     int getSHI(List<Track> tracks) {
         AtomicInteger SHI = new AtomicInteger();
-        // tracks 에서 question - answer 로 수면 위생 점수 계산
+        SHI.set(0);
+        // tracks 에서 question - answer 확인하면서 수면 위생 점수 계산
 
         // 평소 알코올 섭취량? 631ad4c675ce6608eb91f75a
+        // answer_id = 0 -> + 0점
+        // answer_id = 1 -> + 1점
+        // answer_id = 2 -> + 2점
         SHI.addAndGet(tracks.stream()
-                .filter(track -> track.getQuestion_id() == "631ad4c675ce6608eb91f75a")
+                .filter(track -> track.getQuestion_id().equals("631ad45475ce6608eb91f759"))
                 .findFirst()
                 .get().getAnswer_id().get(0));
 
-        System.out.println("SHI : "+ SHI.get());
 
         // 평소 카페인 섭취량? 631ad45475ce6608eb91f759
+        // answer_id = 0 -> + 0점
+        // answer_id = 1 -> + 1점
+        // answer_id = 2 -> + 2점
         SHI.addAndGet(tracks.stream()
-                .filter(track -> track.getQuestion_id() == "631ad45475ce6608eb91f759")
+                .filter(track -> track.getQuestion_id().equals("631ad45475ce6608eb91f759"))
                 .findFirst()
                 .get().getAnswer_id().get(0));
 
-        System.out.println("SHI : "+ SHI.get());
-
         // 자신에게 해당하는 것을 고르세요. 631ad41075ce6608eb91f757
+        // answer_id = 0, 1, 2, 3 -> + 1점
+        // answer_id = 4, 5, 6 -> + 2점
         tracks.stream()
-                .filter(track -> track.getQuestion_id() == "631ad41075ce6608eb91f757")
+                .filter(track -> track.getQuestion_id().equals("631ad41075ce6608eb91f757"))
                 .findFirst()
                 .get()
                 .getAnswer_id()
@@ -156,8 +162,6 @@ public class QuestionService {
                     if ( answer < 4 ) SHI.addAndGet(1); // 0, 1, 2, 3 -> 1점
                     else SHI.addAndGet(2); // 4, 5, 6 -> 2점
                 });
-
-        System.out.println("SHI : "+ SHI.get());
 
         return SHI.get();
     }
