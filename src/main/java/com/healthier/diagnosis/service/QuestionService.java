@@ -47,31 +47,33 @@ public class QuestionService {
         return modelMapper.map(first_question, QuestionDto.class);
     }
 
-
-    /**
-     * 수면장애 : 수면의 문제가 일상생활에 지장을 주나요? 에 no 라고 응답한 경우, 수면위생점수로 진단
-     */
-    @Transactional(readOnly = true)
-    public Object findFirstQuestion(FirstQuestionRequestDto dto) {
-        if(dto.getAnswer().equals("n")){
-            int score = dto.getScoreB();
-            if(score < 0 || score > 17){
-                throw new CustomException(ErrorCode.RANGE_NOT_SATISFIABLE);
-            }
-            if (score <= 6){ // 수면 장애 아님
-                return diagnosisService.findDiagnosis("62ce908856e36933184b0fbd");
-            }
-            else if(score >= 11) { // 수면습관 경고
-                return diagnosisService.findDiagnosis("62ce900456e36933184b0fba");
-           }
-            else { // 수면습관 주의
-                return diagnosisService.findDiagnosis("62ce906a56e36933184b0fbc");
-            }
-        }
-
-        // 첫번째 질문 정보 조회
-        return getQuestionResponseDto(ID);
-    }
+//    ===================== 수면장애 첫번째 진단 응답 삭제 =====================
+//
+//    /**
+//     * 수면장애 : 수면의 문제가 일상생활에 지장을 주나요? 에 no 라고 응답한 경우, 수면위생점수로 진단
+//     */
+//    @Transactional(readOnly = true)
+//    public Object findFirstQuestion(FirstQuestionRequestDto dto) {
+//        if(dto.getAnswer().equals("n")){
+//            int score = dto.getScoreB();
+//            if(score < 0 || score > 17){
+//                throw new CustomException(ErrorCode.RANGE_NOT_SATISFIABLE);
+//            }
+//            if (score <= 6){ // 수면 장애 아님
+//                return diagnosisService.findDiagnosis("62ce908856e36933184b0fbd");
+//            }
+//            else if(score >= 11) { // 수면습관 경고
+//                return diagnosisService.findDiagnosis("62ce900456e36933184b0fba");
+//           }
+//            else { // 수면습관 주의
+//                return diagnosisService.findDiagnosis("62ce906a56e36933184b0fbc");
+//            }
+//        }
+//
+//        // 첫번째 질문 정보 조회
+//        return getQuestionResponseDto(ID);
+//    }
+//    ===================== 수면장애 첫번째 진단 응답 삭제 =====================
 
     /**
      * 결정적 질문 진단결과 조회 및 로그 저장
