@@ -81,8 +81,6 @@ class QuestionServiceTest {
         DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
                 .questionId("62ca4970705b0e3bdeefc749")
                 .answerId(1)
-                .period(3)
-                .scoreB(11)
                 .build();
                 
         //when
