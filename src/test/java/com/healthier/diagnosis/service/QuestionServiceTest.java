@@ -96,19 +96,29 @@ class QuestionServiceTest {
     @Test
     void 약물과용두통(){
         // given
-        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0)
-                .cycle(0)
-                .pain_level(1)
-                .is_taking_medication(1) // 약물복용 O
                 .birthYear(2000)
                 .gender("f")
-                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .interests(Arrays.asList(0))
+                .tracks(Arrays.asList(
+                        Track.builder().question_id("631adb3775ce6608eb91f761").answer_id(Arrays.asList(1)).build(), // 언제부터 통증이
+                        Track.builder().question_id("631adb1775ce6608eb91f760").answer_id(Arrays.asList(1)).build(), // 한달에 15일 이상
+                        Track.builder().question_id("631adaf175ce6608eb91f75f").answer_id(Arrays.asList(1)).build(), // 통증의 정도
+                        Track.builder().question_id("631adabc75ce6608eb91f75e").answer_id(Arrays.asList(0)).build(), // 진통제?
+                        Track.builder().question_id("62d8e1b4a49a42d5112f23b4").answer_id(Arrays.asList(1)).build(), // 맥박이 느껴지는
+                        Track.builder().question_id("62d8e235a49a42d5112f23b7").answer_id(Arrays.asList(1)).build(), // 턱이 아프거나
+                        Track.builder().question_id("62d8e2a5a49a42d5112f23be").answer_id(Arrays.asList(1)).build(), // 두통이 올때
+                        Track.builder().question_id("62d8e2b1a49a42d5112f23bf").answer_id(Arrays.asList(1)).build(), // 고혈압이나
+                        Track.builder().question_id("62d8e2c8a49a42d5112f23c1").answer_id(Arrays.asList(1)).build(), // 근육이 동반
+                        Track.builder().question_id("62d8e2d5a49a42d5112f23c2").answer_id(Arrays.asList(1)).build(),  // 최근 시력이
+                        Track.builder().question_id("62d8e2e4a49a42d5112f23c3").answer_id(Arrays.asList(1)).build(),  // 안면 마비나
+                        Track.builder().question_id("62d8e2fba49a42d5112f23c4").answer_id(Arrays.asList(1)).build())) // 이명이나
                 .build();
+
         // when
-        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+        DiagnosisResponseDto diagnosis = questionService.findHeadacheDecisiveQuestion(dto);
 
         // then
         assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("약물 과용 두통");
@@ -118,20 +128,29 @@ class QuestionServiceTest {
     @Test
     void 경미한두통(){
         // given
-        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0) // 기간 : 상관없음
-                .cycle(0) // 주기 : 상관없음
-                .pain_level(1) // 경미
-                .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
-                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .interests(Arrays.asList(0))
+                .tracks(Arrays.asList(
+                        Track.builder().question_id("631adb3775ce6608eb91f761").answer_id(Arrays.asList(1)).build(), // 언제부터 통증이
+                        Track.builder().question_id("631adb1775ce6608eb91f760").answer_id(Arrays.asList(1)).build(), // 한달에 15일 이상
+                        Track.builder().question_id("631adaf175ce6608eb91f75f").answer_id(Arrays.asList(1)).build(), // 통증의 정도
+                        Track.builder().question_id("631adabc75ce6608eb91f75e").answer_id(Arrays.asList(1)).build(), // 진통제?
+                        Track.builder().question_id("62d8e1b4a49a42d5112f23b4").answer_id(Arrays.asList(1)).build(), // 맥박이 느껴지는
+                        Track.builder().question_id("62d8e235a49a42d5112f23b7").answer_id(Arrays.asList(1)).build(), // 턱이 아프거나
+                        Track.builder().question_id("62d8e2a5a49a42d5112f23be").answer_id(Arrays.asList(1)).build(), // 두통이 올때
+                        Track.builder().question_id("62d8e2b1a49a42d5112f23bf").answer_id(Arrays.asList(1)).build(), // 고혈압이나
+                        Track.builder().question_id("62d8e2c8a49a42d5112f23c1").answer_id(Arrays.asList(1)).build(), // 근육이 동반
+                        Track.builder().question_id("62d8e2d5a49a42d5112f23c2").answer_id(Arrays.asList(1)).build(),  // 최근 시력이
+                        Track.builder().question_id("62d8e2e4a49a42d5112f23c3").answer_id(Arrays.asList(1)).build(),  // 안면 마비나
+                        Track.builder().question_id("62d8e2fba49a42d5112f23c4").answer_id(Arrays.asList(1)).build())) // 이명이나
                 .build();
 
         // when
-        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+        DiagnosisResponseDto diagnosis = questionService.findHeadacheDecisiveQuestion(dto);
 
         // then
         assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("경미한 두통");
@@ -141,16 +160,25 @@ class QuestionServiceTest {
     @Test
     void 중증두통(){
         // given
-        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(0) // 기간 : 상관없음
-                .cycle(0) // 주기 : 상관없음
-                .pain_level(3) // 통증의 정도 :  3 or 4
-                .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
-                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+                .interests(Arrays.asList(0))
+                .tracks(Arrays.asList(
+                        Track.builder().question_id("631adb3775ce6608eb91f761").answer_id(Arrays.asList(1)).build(), // 언제부터 통증이
+                        Track.builder().question_id("631adb1775ce6608eb91f760").answer_id(Arrays.asList(1)).build(), // 한달에 15일 이상
+                        Track.builder().question_id("631adaf175ce6608eb91f75f").answer_id(Arrays.asList(3)).build(), // 통증의 정도
+                        Track.builder().question_id("631adabc75ce6608eb91f75e").answer_id(Arrays.asList(1)).build(), // 진통제?
+                        Track.builder().question_id("62d8e1b4a49a42d5112f23b4").answer_id(Arrays.asList(1)).build(), // 맥박이 느껴지는
+                        Track.builder().question_id("62d8e235a49a42d5112f23b7").answer_id(Arrays.asList(1)).build(), // 턱이 아프거나
+                        Track.builder().question_id("62d8e2a5a49a42d5112f23be").answer_id(Arrays.asList(1)).build(), // 두통이 올때
+                        Track.builder().question_id("62d8e2b1a49a42d5112f23bf").answer_id(Arrays.asList(1)).build(), // 고혈압이나
+                        Track.builder().question_id("62d8e2c8a49a42d5112f23c1").answer_id(Arrays.asList(1)).build(), // 근육이 동반
+                        Track.builder().question_id("62d8e2d5a49a42d5112f23c2").answer_id(Arrays.asList(1)).build(),  // 최근 시력이
+                        Track.builder().question_id("62d8e2e4a49a42d5112f23c3").answer_id(Arrays.asList(1)).build(),  // 안면 마비나
+                        Track.builder().question_id("62d8e2fba49a42d5112f23c4").answer_id(Arrays.asList(1)).build())) // 이명이나
                 .build();
 
         // when
@@ -164,29 +192,29 @@ class QuestionServiceTest {
     @Test
     void 만성두통(){
         // given
-        List<HeadacheDecisiveQuestionRequestDto.Track> tracks = new ArrayList<>();
-
-        List<Integer> answers = new ArrayList<>();
-        answers.add(0);
-
-        HeadacheDecisiveQuestionRequestDto.Track track = new HeadacheDecisiveQuestionRequestDto.Track("62d8e2fba49a42d5112f23c4", answers);
-        tracks.add(track);
-
-        HeadacheDecisiveQuestionRequestDto dto = HeadacheDecisiveQuestionRequestDto.builder()
+        DecisiveQuestionRequestDto dto = DecisiveQuestionRequestDto.builder()
                 .questionId("62d8e2fba49a42d5112f23c4")
                 .answerId(1) // 아니오
-                .period(3) // 기간 : 한달 전(2) or 3개월 전(3)
-                .cycle(1) // 주기 : 예(1)
-                .pain_level(5) // 통증의 정도 : 상관없음 (1-5)
-                .is_taking_medication(0) // 약물복용 X
                 .birthYear(2000)
                 .gender("f")
-                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
-                .tracks(tracks)
+                .interests(Arrays.asList(0))
+                .tracks(Arrays.asList(
+                        Track.builder().question_id("631adb3775ce6608eb91f761").answer_id(Arrays.asList(2)).build(), // 언제부터 통증이
+                        Track.builder().question_id("631adb1775ce6608eb91f760").answer_id(Arrays.asList(0)).build(), // 한달에 15일 이상
+                        Track.builder().question_id("631adaf175ce6608eb91f75f").answer_id(Arrays.asList(5)).build(), // 통증의 정도
+                        Track.builder().question_id("631adabc75ce6608eb91f75e").answer_id(Arrays.asList(1)).build(), // 진통제?
+                        Track.builder().question_id("62d8e1b4a49a42d5112f23b4").answer_id(Arrays.asList(1)).build(), // 맥박이 느껴지는
+                        Track.builder().question_id("62d8e235a49a42d5112f23b7").answer_id(Arrays.asList(1)).build(), // 턱이 아프거나
+                        Track.builder().question_id("62d8e2a5a49a42d5112f23be").answer_id(Arrays.asList(1)).build(), // 두통이 올때
+                        Track.builder().question_id("62d8e2b1a49a42d5112f23bf").answer_id(Arrays.asList(1)).build(), // 고혈압이나
+                        Track.builder().question_id("62d8e2c8a49a42d5112f23c1").answer_id(Arrays.asList(1)).build(), // 근육이 동반
+                        Track.builder().question_id("62d8e2d5a49a42d5112f23c2").answer_id(Arrays.asList(1)).build(),  // 최근 시력이
+                        Track.builder().question_id("62d8e2e4a49a42d5112f23c3").answer_id(Arrays.asList(1)).build(),  // 안면 마비나
+                        Track.builder().question_id("62d8e2fba49a42d5112f23c4").answer_id(Arrays.asList(1)).build())) // 이명이나
                 .build();
 
         // when
-        DiagnosisResponseDto diagnosis = (DiagnosisResponseDto) questionService.findHeadacheDecisiveQuestion(dto);
+        DiagnosisResponseDto diagnosis = questionService.findHeadacheDecisiveQuestion(dto);
 
         // then
         assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("만성 두통");
