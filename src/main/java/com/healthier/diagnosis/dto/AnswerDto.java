@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class AnswerDto {
-    private int answerId;
+    private int answer_id;
     private String answer;
-    private int isDecisive;  // 1이면 진단 결과 도출
+    private int is_decisive;  // 1이면 진단 결과 도출
 }
