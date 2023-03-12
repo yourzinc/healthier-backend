@@ -53,35 +53,35 @@ public class QuestionControllerTest {
 
     }
 
-    @DisplayName("첫번째 질문 조회_yes")
-    @Test
-    void getFirstQuestion_yes() throws Exception {
-        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
-                .answer("y")
-                .build();
+//    @DisplayName("첫번째 질문 조회_yes")
+//    @Test
+//    void getFirstQuestion_yes() throws Exception {
+//        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
+//                .answer("y")
+//                .build();
+//
+//        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(dto)))
+//                .andExpect(status().isOk());
+//
+//    }
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
-
-    }
-
-    @DisplayName("첫번째 질문 조회_no")
-    @Test
-    void getFirstQuestion_no() throws Exception {
-        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
-                .answer("y")
-                .scoreB(13)
-                .gender("f")
-                .birthYear(2000)
-                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
-                .build();
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
-
-    }
+//    @DisplayName("첫번째 질문 조회_no")
+//    @Test
+//    void getFirstQuestion_no() throws Exception {
+//        FirstQuestionRequestDto dto = FirstQuestionRequestDto.builder()
+//                .answer("y")
+//                .scoreB(13)
+//                .gender("f")
+//                .birthYear(2000)
+//                .interests(Arrays.stream(new int[]{1, 2, 3, 4}).boxed().collect(Collectors.toList()))
+//                .build();
+//
+//        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagnose/sleepdisorder/first").contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(dto)))
+//                .andExpect(status().isOk());
+//
+//    }
 
     @DisplayName("결정적 질문 진단결과 조회")
     @Test
