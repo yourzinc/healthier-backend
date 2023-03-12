@@ -2,7 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
-import com.healthier.diagnosis.dto.headache.HeadachePainAreaNextResponse;
+import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
 import com.healthier.diagnosis.repository.HeadacheQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

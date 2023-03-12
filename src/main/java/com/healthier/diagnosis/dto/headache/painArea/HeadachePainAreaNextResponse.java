@@ -1,6 +1,8 @@
-package com.healthier.diagnosis.dto.headache;
+package com.healthier.diagnosis.dto.headache.painArea;
 
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.dto.headache.QuestionDto;
+import com.healthier.diagnosis.dto.headache.ResultDto;
 import lombok.Data;
 
 import java.util.ArrayList;
