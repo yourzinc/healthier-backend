@@ -39,4 +39,12 @@ public class HeadacheQuestionController {
     public HeadachePainAreaNextResponse PainAreaNextQuestion(@RequestBody @Valid HeadachePainAreaNextRequest request) {
         return questionService.findPainAreaNextQuestion(request.getQuestionId(), request.getAnswerId());
     }
+
+    /**
+     * 추가적인 악화요인 질문
+     */
+    @GetMapping("/additional-factor")
+    public QuestionResponse AdditionalFactorQuestion() {
+        return new QuestionResponse(questionService.findAdditionalFactorQuestion());
+    }
 }
