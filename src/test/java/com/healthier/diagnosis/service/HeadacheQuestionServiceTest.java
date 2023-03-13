@@ -79,4 +79,15 @@ class HeadacheQuestionServiceTest {
         Assertions.assertThat(next.getResult().getResult()).isEqualTo("삼차신경통");
     }
 
+    @DisplayName("추가적인 악화 요인 질문")
+    @Test
+    public void findAdditionalFactorQuestion() throws Exception {
+        //given
+        Question question = questionService.findAdditionalFactorQuestion();
+
+        //then
+        Assertions.assertThat(question.getQuestion()).isEqualTo("추가적인 악화요인을 살펴볼게요!\\n다음 중 해당되는 것을 모두 골라주세요.");
+        Assertions.assertThat(question.getIsMultiple()).isEqualTo(true);
+    }
+
 }

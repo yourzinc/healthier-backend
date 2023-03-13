@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,5 +43,13 @@ public class HeadacheQuestionService {
         else {
             return new HeadachePainAreaNextResponse(answer.getResultId(), answer.getResult());
         }
+    }
+
+    /**
+     * 추가적인 악화 요인 질문 조회
+     */
+    public Question findAdditionalFactorQuestion() {
+        List<Question> questions = questionRepository.findByType("additional-factor");
+        return questions.get(0);
     }
 }
