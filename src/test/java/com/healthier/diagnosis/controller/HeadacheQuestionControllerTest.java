@@ -2,6 +2,7 @@ package com.healthier.diagnosis.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.healthier.diagnosis.dto.headache.QuestionResponse;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,6 +68,17 @@ class HeadacheQuestionControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/diagnose/headache/pain-area/next").contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(new HeadachePainAreaNextRequest(461,0)
+                                )))
+                .andExpect(result -> status().isOk());
+    }
+
+    @DisplayName("API : 추가적인 악화요인 질문")
+    @Test
+    public void additionalFactorQuestion() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/diagnose/headache/additional-factor").contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                objectMapper.writeValueAsString(questionController.AdditionalFactorQuestion()
                                 )))
                 .andExpect(result -> status().isOk());
     }
