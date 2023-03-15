@@ -4,9 +4,7 @@ import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
 import com.healthier.diagnosis.domain.question.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
-import com.healthier.diagnosis.dto.headache.commonQuestion.PrimaryHeadacheRequest;
-import com.healthier.diagnosis.dto.headache.commonQuestion.RedFlagSignRequest;
-import com.healthier.diagnosis.dto.headache.commonQuestion.HeadacheResponse;
+import com.healthier.diagnosis.dto.headache.commonQuestion.*;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
 import com.healthier.diagnosis.repository.HeadacheQuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +43,7 @@ public class HeadacheQuestionService {
     public HeadacheResponse findRedFlagSignResult(RedFlagSignRequest request) {
         // Red Flag Sign 진단
         if (isRedFlagSign(request)) {
+            // TODO: 진단 결과 조회 추가하기
             return HeadacheResponse.builder().type(1).message("RED FLAG SIGN").build();
         }
 
@@ -86,10 +85,10 @@ public class HeadacheQuestionService {
      */
     public HeadacheResponse findPrimaryHeadacheQuestion(PrimaryHeadacheRequest request) {
         // 공통 질문 301,302,304번 포인트 계산
-        List<PrimaryHeadacheRequest.QnA> pointQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() != 303).collect(Collectors.toList());
+        List<QnARequest> pointQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() != 303).collect(Collectors.toList());
         int point = 0;
 
-        for (PrimaryHeadacheRequest.QnA q : pointQuestions) {
+        for (QnARequest q : pointQuestions) {
             if (q.getAnswerId() == 1) { // 군발/긴장 ++
                 point ++;
             }
@@ -102,7 +101,7 @@ public class HeadacheQuestionService {
         }
 
         // 공통 질문 303번 포인트 계산
-        PrimaryHeadacheRequest.QnA question303 = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 303).findAny().get();
+        QnARequest question303 = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 303).findAny().get();
         if (question303.getAnswerId() == 1) { // 군발 ++
             point ++;
         }
@@ -120,6 +119,26 @@ public class HeadacheQuestionService {
 
         }
 
+    }
+
+    /**
+     * 일차성 두통 질문 응답
+     */
+    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(QnARequest request) {
+        Question question = questionRepository.findById(request.getQuestionId()).get();
+        Answer answer = question.getAnswers().get(request.getAnswerId());
+
+        if (answer.isDecisive()) { // 진단 결과 안내
+            return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(answer.getResultId(), answer.getResult())).build();
+        }
+        else { // 다음 질문
+            List<Question> questions = new ArrayList<>();
+            questions.add(questionRepository.findById(answer.getNextQuestionId()).get());
+
+            List<QuestionDto> questionDtos = getQuestionDtos(questions);
+
+            return PrimaryHeadacheNextResponse.builder().type(1).questions(questionDtos).build();
+        }
     }
 
     private HeadacheResponse getHeadacheResponse(int id, int type, String message) {
@@ -149,10 +168,10 @@ public class HeadacheQuestionService {
      * 만성 두통 감별 로직
      */
     private boolean isChronicPain(RedFlagSignRequest request) {
-        List<RedFlagSignRequest.QnA> chronicQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 100 || qnA.getQuestionId() == 101).collect(Collectors.toList());
+        List<QnARequest> chronicQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 100 || qnA.getQuestionId() == 101).collect(Collectors.toList());
         boolean isChronic = false;
 
-        for (RedFlagSignRequest.QnA q : chronicQuestions) {
+        for (QnARequest q : chronicQuestions) {
             if (q.getAnswerId() == 0) {
                 isChronic = true;
             }
@@ -164,12 +183,12 @@ public class HeadacheQuestionService {
      * Red Flag Sign 감별 로직
      */
     private boolean isRedFlagSign(RedFlagSignRequest request) {
-        List<RedFlagSignRequest.QnA> redFlagQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() / 100 == 2).collect(Collectors.toList());
+        List<QnARequest> redFlagQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() / 100 == 2).collect(Collectors.toList());
 
         boolean isRedFlag = false;
-        List<RedFlagSignRequest.QnA> redFlagResult = new ArrayList<>(); // 진단 결과
+        List<QnARequest> redFlagResult = new ArrayList<>(); // 진단 결과
 
-        for (RedFlagSignRequest.QnA q : redFlagQuestions) {
+        for (QnARequest q : redFlagQuestions) {
             switch (q.getQuestionId()) {
                 case 200:
                     if (Arrays.asList(0, 1).contains(q.getAnswerId())) {

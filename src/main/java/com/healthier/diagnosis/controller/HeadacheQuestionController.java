@@ -53,6 +53,14 @@ public class HeadacheQuestionController {
     }
 
     /**
+     * 일차성 두통 공통 질문 응답
+     */
+    @PostMapping("api/v2/diagnose/headache/primary-headache/next")
+    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid QnARequest request) {
+        return questionService.findPrimaryHeadacheNextQuestion(request);
+    }
+
+    /**
      * 특정 통증 부위 시작 질문
      */
 

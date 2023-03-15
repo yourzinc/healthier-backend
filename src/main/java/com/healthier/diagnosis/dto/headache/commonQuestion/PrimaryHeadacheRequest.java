@@ -12,17 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PrimaryHeadacheRequest {
-    private List<QnA> questions;
+    private List<QnARequest> questions;
     private int type;
     private String message;
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class QnA {
-        private int questionId;
-        private int answerId;
-    }
 }
