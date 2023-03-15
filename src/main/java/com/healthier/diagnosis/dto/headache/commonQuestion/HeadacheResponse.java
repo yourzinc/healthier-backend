@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class RedFlagSignResponse {
+public class HeadacheResponse {
     private int type;
     private String message;
     private List<QuestionDto> questions;

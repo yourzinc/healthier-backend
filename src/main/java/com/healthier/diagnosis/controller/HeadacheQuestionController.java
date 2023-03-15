@@ -8,7 +8,6 @@ import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
 import com.healthier.diagnosis.service.HeadacheQuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,8 +40,16 @@ public class HeadacheQuestionController {
      * 두통 Red Flag Sign 결과
      */
     @PostMapping("api/v2/diagnose/headache/red-flag-sign")
-    public RedFlagSignResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
+    public HeadacheResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
         return questionService.findRedFlagSignResult(request);
+    }
+
+    /**
+     * 일차성 두통 공통 질문 결과
+     */
+    @PostMapping("api/v2/diagnose/headache/primary-headache")
+    public HeadacheResponse PrimaryHeadacheQuestion(@RequestBody @Valid PrimaryHeadacheRequest request) {
+        return questionService.findPrimaryHeadacheQuestion(request);
     }
 
     /**
