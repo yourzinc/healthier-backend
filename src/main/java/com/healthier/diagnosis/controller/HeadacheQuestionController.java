@@ -2,6 +2,7 @@ package com.healthier.diagnosis.controller;
 
 import com.healthier.diagnosis.domain.headache.Question;
 import com.healthier.diagnosis.dto.headache.QuestionResponse;
+import com.healthier.diagnosis.dto.headache.commonQuestion.*;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
@@ -34,6 +35,14 @@ public class HeadacheQuestionController {
     @GetMapping("api/v2/diagnose/headache/red-flag-sign")
     public QuestionResponse RedFlagSignQuestion() {
         return new QuestionResponse(questionService.findRedFlagSignQuestion());
+    }
+
+    /**
+     * 두통 Red Flag Sign 결과
+     */
+    @PostMapping("api/v2/diagnose/headache/red-flag-sign")
+    public RedFlagSignResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
+        return questionService.findRedFlagSignResult(request);
     }
 
     /**
