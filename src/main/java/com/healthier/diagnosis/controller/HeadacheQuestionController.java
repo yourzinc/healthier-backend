@@ -21,6 +21,14 @@ public class HeadacheQuestionController {
     private final HeadacheQuestionService questionService;
 
     /**
+     * 두통 기본 질문
+     */
+    @GetMapping("api/v2/diagnose/headache/basic")
+    public QuestionResponse BasicQuestion() {
+        return new QuestionResponse(questionService.findBasicQuestion());
+    }
+
+    /**
      * 특정 통증 부위 시작 질문
      */
 
