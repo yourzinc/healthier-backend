@@ -2,6 +2,7 @@ package com.healthier.diagnosis.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.healthier.diagnosis.dto.headache.AdditionalFactorResultRequest;
 import com.healthier.diagnosis.dto.headache.QuestionResponse;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
@@ -79,6 +80,17 @@ class HeadacheQuestionControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/diagnose/headache/additional-factor").contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(questionController.AdditionalFactorQuestion()
+                                )))
+                .andExpect(result -> status().isOk());
+    }
+
+    @DisplayName("API : 추가적인 악화요인 결과")
+    @Test
+    public void additionalFactorResult() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/diagnose/headache/additional-factor").contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                objectMapper.writeValueAsString(new AdditionalFactorResultRequest(601, new int [] {2, 3} )
                                 )))
                 .andExpect(result -> status().isOk());
     }
