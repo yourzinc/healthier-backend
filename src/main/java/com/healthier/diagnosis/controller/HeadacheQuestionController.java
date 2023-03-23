@@ -1,7 +1,9 @@
 package com.healthier.diagnosis.controller;
 
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.dto.headache.AdditionalFactorResultRequest;
 import com.healthier.diagnosis.dto.headache.QuestionResponse;
+import com.healthier.diagnosis.dto.headache.ResultResponse;
 import com.healthier.diagnosis.dto.headache.commonQuestion.*;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
@@ -86,5 +88,13 @@ public class HeadacheQuestionController {
     @GetMapping("/additional-factor")
     public QuestionResponse AdditionalFactorQuestion() {
         return new QuestionResponse(questionService.findAdditionalFactorQuestion());
+    }
+
+    /**
+     * 추가적인 악화요인 결과
+     */
+    @PostMapping("/additional-factor")
+    public ResultResponse AdditionalFactorResult(@RequestBody @Valid AdditionalFactorResultRequest request) {
+        return new ResultResponse(questionService.getAdditionalFactorResult(request.getQuestionId(), request.getAnswerId()));
     }
 }

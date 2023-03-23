@@ -2,6 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.domain.question.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
 import com.healthier.diagnosis.dto.headache.commonQuestion.*;
@@ -247,5 +248,20 @@ public class HeadacheQuestionService {
     public Question findAdditionalFactorQuestion() {
         List<Question> questions = questionRepository.findByType("additional-factor");
         return questions.get(0);
+    }
+
+    /**
+     * 추가적인 악화 요인 결과
+     */
+    public ResultDto getAdditionalFactorResult(int questionId, int [] answerId ) {
+        List<Answer> answers = questionRepository.findById(questionId).get().getAnswers();
+
+        for (int i : answerId) {
+            if (answers.get(i).getResultId() != 0) {
+                return new ResultDto(answers.get(i).getResultId(), answers.get(i).getResult());
+            }
+        }
+
+        return null;
     }
 }
