@@ -1,6 +1,7 @@
 package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class HeadacheQuestionServiceTest {
@@ -90,4 +89,20 @@ class HeadacheQuestionServiceTest {
         Assertions.assertThat(question.getIsMultiple()).isEqualTo(true);
     }
 
+    @DisplayName("추가적인 악화 요인 결과")
+    @Test
+    public void getAdditionalFactorResultTest() throws Exception {
+        //given
+        int  questionId = 601;
+        int [] answerId1 = {2,3};
+        int [] answerId2 = {1};
+
+        // when
+        ResultDto resultDto1 = questionService.getAdditionalFactorResult(questionId, answerId1);
+        ResultDto resultDto2 = questionService.getAdditionalFactorResult(questionId, answerId2);
+
+        //then
+        Assertions.assertThat(resultDto1.getResult()).isEqualTo("약물 과용으로 인한 두통");
+        Assertions.assertThat(resultDto2).isEqualTo(null);
+    }
 }
