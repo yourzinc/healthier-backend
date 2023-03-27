@@ -25,7 +25,7 @@ public class HeadacheQuestionController {
     /**
      * 두통 기본 질문
      */
-    @GetMapping("api/v2/diagnose/headache/basic")
+    @GetMapping("/basic")
     public QuestionResponse BasicQuestion() {
         return new QuestionResponse(questionService.findBasicQuestion());
     }
@@ -33,7 +33,7 @@ public class HeadacheQuestionController {
     /**
      * 두통 Red Flag Sign 질문
      */
-    @GetMapping("api/v2/diagnose/headache/red-flag-sign")
+    @GetMapping("/red-flag-sign")
     public QuestionResponse RedFlagSignQuestion() {
         return new QuestionResponse(questionService.findRedFlagSignQuestion());
     }
@@ -41,7 +41,7 @@ public class HeadacheQuestionController {
     /**
      * 두통 Red Flag Sign 결과
      */
-    @PostMapping("api/v2/diagnose/headache/red-flag-sign")
+    @PostMapping("/red-flag-sign")
     public HeadacheResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
         return questionService.findRedFlagSignResult(request);
     }
@@ -49,7 +49,7 @@ public class HeadacheQuestionController {
     /**
      * 일차성 두통 공통 질문 결과
      */
-    @PostMapping("api/v2/diagnose/headache/primary-headache")
+    @PostMapping("/primary-headache")
     public HeadacheResponse PrimaryHeadacheQuestion(@RequestBody @Valid PrimaryHeadacheRequest request) {
         return questionService.findPrimaryHeadacheQuestion(request);
     }
@@ -57,7 +57,7 @@ public class HeadacheQuestionController {
     /**
      * 일차성 두통 공통 질문 응답
      */
-    @PostMapping("api/v2/diagnose/headache/primary-headache/next")
+    @PostMapping("/primary-headache/next")
     public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid QnARequest request) {
         return questionService.findPrimaryHeadacheNextQuestion(request);
     }
