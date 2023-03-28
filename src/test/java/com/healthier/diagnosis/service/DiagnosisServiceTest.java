@@ -1,11 +1,17 @@
 package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.dto.DiagnosisResponseDto;
+import com.healthier.diagnosis.dto.headache.ResultDto;
+import com.healthier.diagnosis.dto.headache.result.HeadacheResultResponse;
 import com.healthier.diagnosis.repository.DiagnosisRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,5 +52,56 @@ class DiagnosisServiceTest {
 
         //then
         assertThat(diagnosis.getDiagnosticResult().getTitle()).isEqualTo("단기 불면증");
+    }
+
+    @DisplayName("두통 최종 문진 결과 우선순위 조회 - type 1")
+    @Test
+    public void getHeadacheResultPriorityTest1() throws Exception {
+        //given
+        List<ResultDto> results = new ArrayList<>();
+
+        results.add(new ResultDto(1002, "전조증상이 있는 편두통"));
+        results.add(new ResultDto(1022, "대후두 신경통"));
+
+        //when
+
+        HeadacheResultResponse resultPriority = diagnosisService.getHeadacheResultPriority(results);
+
+        //then
+        Assertions.assertThat(resultPriority.getResults().getLikely().get(0).getContent()).isEqualTo("전조증상이 있는 편두통");
+        Assertions.assertThat(resultPriority.getResults().getSuspicious().get(0).getContent()).isEqualTo("대후두 신경통");
+        Assertions.assertThat(resultPriority.getResults().getPredicted()).isEqualTo(null);
+    }
+
+    @DisplayName("두통 최종 문진 결과 우선순위 조회 - type 3")
+    @Test
+    public void getHeadacheResultPriorityTest3() throws Exception {
+        //given
+        List<ResultDto> results = new ArrayList<>();
+
+        //when
+
+        HeadacheResultResponse resultPriority = diagnosisService.getHeadacheResultPriority(results);
+
+        //thens
+        Assertions.assertThat(resultPriority.getResults().getLikely().get(0).getContent()).isEqualTo("긴장성 두통");
+        Assertions.assertThat(resultPriority.getResults().getPredicted()).isEqualTo(null);
+    }
+
+    @DisplayName("두통 최종 문진 결과 우선순위 조회 - type 4")
+    @Test
+    public void getHeadacheResultPriorityTest4() throws Exception {
+        //given
+        List<ResultDto> results = new ArrayList<>();
+        results.add(new ResultDto(1022, "대후두 신경통"));
+        results.add(new ResultDto(1025, "약물 과용으로 인한 두통"));
+
+        //when
+
+        HeadacheResultResponse resultPriority = diagnosisService.getHeadacheResultPriority(results);
+
+        //thens
+        Assertions.assertThat(resultPriority.getResults().getSuspicious().get(0).getContent()).isEqualTo("대후두 신경통");
+        Assertions.assertThat(resultPriority.getResults().getPredicted().get(0).getContent()).isEqualTo("약물 과용으로 인한 두통");
     }
 }
