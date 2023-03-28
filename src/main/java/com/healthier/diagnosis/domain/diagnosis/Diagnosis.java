@@ -1,7 +1,6 @@
 package com.healthier.diagnosis.domain.diagnosis;
 
 import lombok.*;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,8 +14,8 @@ import java.util.ArrayList;
 @Document(collection = "diagnosis")
 public class Diagnosis {
     @Id
-    private ObjectId _id;
-    private int id;
+    private String id;
+    private int newId;
     private String illustration;
     private String h1;
     private String title;
