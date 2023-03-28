@@ -8,6 +8,9 @@ import com.healthier.diagnosis.dto.headache.commonQuestion.*;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
+import com.healthier.diagnosis.dto.headache.result.HeadacheResultRequest;
+import com.healthier.diagnosis.dto.headache.result.HeadacheResultResponse;
+import com.healthier.diagnosis.service.DiagnosisService;
 import com.healthier.diagnosis.service.HeadacheQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.Optional;
 @RestController
 public class HeadacheQuestionController {
     private final HeadacheQuestionService questionService;
+    private final DiagnosisService diagnosisService;
 
     /**
      * 두통 기본 질문
@@ -96,5 +100,13 @@ public class HeadacheQuestionController {
     @PostMapping("/additional-factor")
     public ResultResponse AdditionalFactorResult(@RequestBody @Valid AdditionalFactorResultRequest request) {
         return new ResultResponse(questionService.getAdditionalFactorResult(request.getQuestionId(), request.getAnswerId()));
+    }
+
+    /**
+     * 최종 문진 결과
+     */
+    @PostMapping("/result")
+    public HeadacheResultResponse HeadacheResult(@RequestBody @Valid HeadacheResultRequest request) {
+        return diagnosisService.getHeadacheResult(request);
     }
 }
