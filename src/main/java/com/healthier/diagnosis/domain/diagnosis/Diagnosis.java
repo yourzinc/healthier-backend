@@ -15,7 +15,6 @@ import java.util.ArrayList;
 @Document(collection = "diagnosis")
 public class Diagnosis {
     @Id
-    @Field(name = "_id")
     private String id;
     @Field(name = "id")
     private int newId;
