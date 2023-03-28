@@ -44,8 +44,7 @@ public class HeadacheQuestionService {
     public HeadacheResponse findRedFlagSignResult(RedFlagSignRequest request) {
         // Red Flag Sign 진단
         if (isRedFlagSign(request)) {
-            // TODO: 진단 결과 조회 추가하기
-            return HeadacheResponse.builder().type(1).message("RED FLAG SIGN").build();
+            return HeadacheResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
         }
 
         // 기타 부위 질문 요청 메시지
