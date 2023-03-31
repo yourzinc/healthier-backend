@@ -1,5 +1,6 @@
-package com.healthier.diagnosis.domain.user;
+package com.healthier.diagnosis.domain.log;
 
+import com.healthier.diagnosis.domain.user.Track;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -16,4 +16,10 @@ public class QuestionResponse {
     public QuestionResponse(Question question) {
         questions.add(new QuestionDto(question));
     }
+
+    public QuestionResponse(List<Question> questionList) {
+        for(Question question : questionList) {
+            questions.add(new QuestionDto(question));
+        }
+    }
 }

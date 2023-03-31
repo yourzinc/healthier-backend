@@ -2,7 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.question.Answer;
 import com.healthier.diagnosis.domain.question.Question;
-import com.healthier.diagnosis.domain.user.Log;
+import com.healthier.diagnosis.domain.log.Log;
 import com.healthier.diagnosis.domain.user.Track;
 import com.healthier.diagnosis.dto.*;
 import com.healthier.diagnosis.exception.CustomException;

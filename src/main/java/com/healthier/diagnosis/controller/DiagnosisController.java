@@ -1,7 +1,5 @@
 package com.healthier.diagnosis.controller;
 
-import com.healthier.diagnosis.domain.diagnosis.Diagnosis;
-import com.healthier.diagnosis.repository.DiagnosisRepository;
 import com.healthier.diagnosis.service.DiagnosisService;
 import org.springframework.http.ResponseEntity;
 import lombok.RequiredArgsConstructor;
