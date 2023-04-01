@@ -12,6 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RedFlagSignRequest {
-    private List<QnARequest> questions;
+    private List<QnA> questions;
     private List<String> painArea;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class QnA {
+        private int questionId;
+        private List<Integer> answerId;
+    }
 }
