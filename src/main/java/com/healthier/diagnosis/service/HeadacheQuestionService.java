@@ -48,7 +48,7 @@ public class HeadacheQuestionService {
         }
 
         // 기타 부위 질문 요청 메시지
-        List painAreas = Arrays.asList(request.getPainArea());
+        List painAreas = request.getPainArea();
         if (painAreas.contains("눈") || painAreas.contains("뒷목") || painAreas.contains("턱") || painAreas.contains("얼굴피부")) {
             return HeadacheResponse.builder().type(4).message("선택한 통증 부위 중 하나를 요청하세요").build();
         }
