@@ -168,11 +168,11 @@ public class HeadacheQuestionService {
      * 만성 두통 감별 로직
      */
     private boolean isChronicPain(RedFlagSignRequest request) {
-        List<QnARequest> chronicQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 100 || qnA.getQuestionId() == 101).collect(Collectors.toList());
+        List<RedFlagSignRequest.QnA> chronicQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 100 || qnA.getQuestionId() == 101).collect(Collectors.toList());
         boolean isChronic = false;
 
-        for (QnARequest q : chronicQuestions) {
-            if (q.getAnswerId() == 0) {
+        for (RedFlagSignRequest.QnA q : chronicQuestions) {
+            if (q.getAnswerId().contains(0)) {
                 isChronic = true;
             }
         }
@@ -183,27 +183,33 @@ public class HeadacheQuestionService {
      * Red Flag Sign 감별 로직
      */
     private boolean isRedFlagSign(RedFlagSignRequest request) {
-        List<QnARequest> redFlagQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() / 100 == 2).collect(Collectors.toList());
+        List<RedFlagSignRequest.QnA> redFlagQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() / 100 == 2).collect(Collectors.toList());
 
         boolean isRedFlag = false;
-        List<QnARequest> redFlagResult = new ArrayList<>(); // 진단 결과
+        List<RedFlagSignRequest.QnA> redFlagResult = new ArrayList<>(); // 진단 결과
 
-        for (QnARequest q : redFlagQuestions) {
+        for (RedFlagSignRequest.QnA q : redFlagQuestions) {
             switch (q.getQuestionId()) {
                 case 200:
-                    if (Arrays.asList(0, 1).contains(q.getAnswerId())) {
+                    if (q.getAnswerId().stream().anyMatch(
+                            a -> a == 0 || a == 1
+                    )) {
                         isRedFlag = true;
                         redFlagResult.add(q);
                     }
                     break;
                 case 201:
-                    if (Arrays.asList(0, 1, 2, 3, 4, 5).contains(q.getAnswerId())) {
+                    if (q.getAnswerId().stream().anyMatch(
+                            a -> a == 0 || a == 1 || a == 2 || a == 3 || a == 4 || a == 5
+                    )) {
                         isRedFlag = true;
                         redFlagResult.add(q);
                     }
                     break;
                 case 202:
-                    if (Arrays.asList(0, 1, 2, 3).contains(q.getAnswerId())) {
+                    if (q.getAnswerId().stream().anyMatch(
+                            a -> a == 0 || a == 1  || a == 2 || a == 3
+                    )) {
                         isRedFlag = true;
                         redFlagResult.add(q);
                     }
