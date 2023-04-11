@@ -2,6 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.domain.question.PainArea;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.domain.question.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
@@ -41,28 +42,30 @@ public class HeadacheQuestionService {
     /**
      * 두통 Red Flag Sign 결과
      */
-    public HeadacheResponse findRedFlagSignResult(RedFlagSignRequest request) {
+    public RedFlagSignResponse findRedFlagSignResult(RedFlagSignRequest request) {
         // Red Flag Sign 진단
         if (isRedFlagSign(request)) {
-            return HeadacheResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
+            return RedFlagSignResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
         }
+
+        boolean isChronic = isChronicPain(request);
 
         // 기타 부위 질문 요청 메시지
         List painAreas = request.getPainArea();
-        if (painAreas.contains("눈") || painAreas.contains("뒷목") || painAreas.contains("턱") || painAreas.contains("얼굴피부")) {
-            return HeadacheResponse.builder().type(4).message("선택한 통증 부위 중 하나를 요청하세요").build();
+        if (painAreas.contains(PainArea.EYES.label()) || painAreas.contains(PainArea.BACKOFNECK.label()) || painAreas.contains(PainArea.CHIN) || painAreas.contains(PainArea.FACIALSKIN.label())) {
+            return RedFlagSignResponse.builder().type(3).isChronic(isChronic ? 1 : 0).message("선택한 통증 부위 중 하나를 요청하세요").build();
         }
 
         List<Question> questions = questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
         List<QuestionDto> questionDtos = getQuestionDtos(questions);
 
         //  만성 일차성 두통 공통 질문
-        if (isChronicPain(request)) {
-            return HeadacheResponse.builder().type(3).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
+        if (isChronic) {
+            return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
         }
 
         // 일차성 두통 공통 질문
-        return HeadacheResponse.builder().type(2).message("일차성 두통 공통 질문").questions(questionDtos).build();
+        return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("일차성 두통 공통 질문").questions(questionDtos).build();
     }
 
     /**
@@ -105,7 +108,7 @@ public class HeadacheQuestionService {
         if (question303.getAnswerId() == 1) { // 군발 ++
             point ++;
         }
-        else if (request.getType() == 2) { // 일차성 두통 - 편두통 ++
+        else if (request.getIsChronic() == 0) { // 일차성 두통 - 편두통 ++
             point --;
         }
         // 만성 일차성 두통 - 편두통/긴장 ++ -> point 처리 X

@@ -46,7 +46,7 @@ public class HeadacheQuestionController {
      * 두통 Red Flag Sign 결과
      */
     @PostMapping("/red-flag-sign")
-    public HeadacheResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
+    public RedFlagSignResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
         return questionService.findRedFlagSignResult(request);
     }
 
