@@ -2,6 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.domain.question.PainArea;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.domain.question.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
@@ -49,7 +50,7 @@ public class HeadacheQuestionService {
 
         // 기타 부위 질문 요청 메시지
         List painAreas = request.getPainArea();
-        if (painAreas.contains("눈") || painAreas.contains("뒷목") || painAreas.contains("턱") || painAreas.contains("얼굴피부")) {
+        if (painAreas.contains(PainArea.EYES.label()) || painAreas.contains(PainArea.BACKOFNECK.label()) || painAreas.contains(PainArea.CHIN) || painAreas.contains(PainArea.FACIALSKIN.label())) {
             return HeadacheResponse.builder().type(4).message("선택한 통증 부위 중 하나를 요청하세요").build();
         }
 
