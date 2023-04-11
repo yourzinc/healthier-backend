@@ -18,8 +18,8 @@ public class HeadachePainAreaNextResponse {
     protected HeadachePainAreaNextResponse() {}
 
     //1) 생성자 : 다음 질문 반환
-    public HeadachePainAreaNextResponse(Question question) {
-        type = 1;
+    public HeadachePainAreaNextResponse(int type, Question question) {
+        this.type = type;
         questions.add(new QuestionDto(question));
     }
 

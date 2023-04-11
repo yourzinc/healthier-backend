@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HeadacheQuestionService {
     private final HeadacheQuestionRepository questionRepository;
+    private static final int [] PAIN_LEVEL_CHECK_QUESTION = { 404, 405, 406 };
 
     /**
      * 두통 기본 질문 조회
@@ -233,6 +234,7 @@ public class HeadacheQuestionService {
      * 특정 통증 부위 다음 질문 조회
      * type 1 : 다음 질문
      * type 2 : 진단 결과 안내
+     * type 3 : ID - 404, 405, 406 (통증 수치 질문) 반환
      */
     public HeadachePainAreaNextResponse findPainAreaNextQuestion(int questionId, int answerId) {
         Optional<Question> question = questionRepository.findById(questionId);
@@ -241,10 +243,18 @@ public class HeadacheQuestionService {
         //다음 질문이 존재할 때
         if (!answer.isDecisive()) {
             int nextQuestionId = answer.getNextQuestionId(); //다음 질문 id
-            return new HeadachePainAreaNextResponse(questionRepository.findById(nextQuestionId).get());
+
+            // type 3: 통증 수치 질문
+            if (Arrays.stream(PAIN_LEVEL_CHECK_QUESTION).anyMatch(i -> i == nextQuestionId)) {
+                return new HeadachePainAreaNextResponse(3, questionRepository.findById(nextQuestionId).get());
+            }
+            // type 1: 일반 질문
+            else {
+                return new HeadachePainAreaNextResponse(1, questionRepository.findById(nextQuestionId).get());
+            }
         }
 
-        //다음 질문이 존재하지 않을 때
+        // type 2: 진단 결과 안내
         else {
             return new HeadachePainAreaNextResponse(answer.getResultId(), answer.getResult());
         }
