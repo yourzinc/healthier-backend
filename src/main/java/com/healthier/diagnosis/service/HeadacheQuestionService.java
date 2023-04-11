@@ -108,7 +108,7 @@ public class HeadacheQuestionService {
         if (question303.getAnswerId() == 1) { // 군발 ++
             point ++;
         }
-        else if (request.getType() == 2) { // 일차성 두통 - 편두통 ++
+        else if (request.getIsChronic() == 0) { // 일차성 두통 - 편두통 ++
             point --;
         }
         // 만성 일차성 두통 - 편두통/긴장 ++ -> point 처리 X

@@ -13,6 +13,6 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PrimaryHeadacheRequest {
     private List<QnARequest> questions;
-    private int type;
+    private int isChronic;
     private String message;
 }
