@@ -42,28 +42,30 @@ public class HeadacheQuestionService {
     /**
      * 두통 Red Flag Sign 결과
      */
-    public HeadacheResponse findRedFlagSignResult(RedFlagSignRequest request) {
+    public RedFlagSignResponse findRedFlagSignResult(RedFlagSignRequest request) {
         // Red Flag Sign 진단
         if (isRedFlagSign(request)) {
-            return HeadacheResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
+            return RedFlagSignResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
         }
+
+        boolean isChronic = isChronicPain(request);
 
         // 기타 부위 질문 요청 메시지
         List painAreas = request.getPainArea();
         if (painAreas.contains(PainArea.EYES.label()) || painAreas.contains(PainArea.BACKOFNECK.label()) || painAreas.contains(PainArea.CHIN) || painAreas.contains(PainArea.FACIALSKIN.label())) {
-            return HeadacheResponse.builder().type(4).message("선택한 통증 부위 중 하나를 요청하세요").build();
+            return RedFlagSignResponse.builder().type(3).isChronic(isChronic ? 1 : 0).message("선택한 통증 부위 중 하나를 요청하세요").build();
         }
 
         List<Question> questions = questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
         List<QuestionDto> questionDtos = getQuestionDtos(questions);
 
         //  만성 일차성 두통 공통 질문
-        if (isChronicPain(request)) {
-            return HeadacheResponse.builder().type(3).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
+        if (isChronic) {
+            return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
         }
 
         // 일차성 두통 공통 질문
-        return HeadacheResponse.builder().type(2).message("일차성 두통 공통 질문").questions(questionDtos).build();
+        return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("일차성 두통 공통 질문").questions(questionDtos).build();
     }
 
     /**
