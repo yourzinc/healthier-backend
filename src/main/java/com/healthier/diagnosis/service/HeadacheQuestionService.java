@@ -254,6 +254,16 @@ public class HeadacheQuestionService {
         if (!answer.isDecisive()) {
             int nextQuestionId = answer.getNextQuestionId(); //다음 질문 id
 
+            // type 4: 일차성 두통 감별로직 공통질문 요청
+            if (nextQuestionId == 0) {
+                int unknownEmergency = 0;
+
+                if (questionId == 406 & answerId == 0) { // 원인 불명의 안과질환 가능성 판별
+                    unknownEmergency = 1;
+                }
+                return new HeadachePainAreaNextResponse(4, "일차성 두통 감별로직 공통질문을 요청하세요", unknownEmergency);
+            }
+
             // type 3: 통증 수치 질문
             if (Arrays.stream(PAIN_LEVEL_CHECK_QUESTION).anyMatch(i -> i == nextQuestionId)) {
                 return new HeadachePainAreaNextResponse(3, questionRepository.findById(nextQuestionId).get());
