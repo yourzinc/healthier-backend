@@ -70,6 +70,13 @@ public class HeadacheQuestionService {
     }
 
     /**
+     * 일차성 두통 감별로직 공통질문
+     */
+    public List<Question> getPrimaryHeadacheQuestion() {
+        return questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
+    }
+
+    /**
      * 일차성 두통 공통 질문 결과
      *
      * [일차성 두통 공통 질문 점수 계산 로직]

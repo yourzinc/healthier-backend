@@ -51,6 +51,14 @@ public class HeadacheQuestionController {
     }
 
     /**
+     * 일차성 두통 감별로직 공통질문
+     */
+    @GetMapping("/primary-headache")
+    public QuestionResponse GetPrimaryHeadacheQuestion() {
+        return new QuestionResponse(questionService.getPrimaryHeadacheQuestion());
+    }
+
+    /**
      * 일차성 두통 공통 질문 결과
      */
     @PostMapping("/primary-headache")
