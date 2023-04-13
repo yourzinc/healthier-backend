@@ -70,6 +70,13 @@ public class HeadacheQuestionService {
     }
 
     /**
+     * 일차성 두통 감별로직 공통질문
+     */
+    public List<Question> getPrimaryHeadacheQuestion() {
+        return questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
+    }
+
+    /**
      * 일차성 두통 공통 질문 결과
      *
      * [일차성 두통 공통 질문 점수 계산 로직]
@@ -128,11 +135,14 @@ public class HeadacheQuestionService {
     /**
      * 일차성 두통 질문 응답
      */
-    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(QnARequest request) {
+    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(PrimaryHeadacheNextRequest request) {
         Question question = questionRepository.findById(request.getQuestionId()).get();
         Answer answer = question.getAnswers().get(request.getAnswerId());
 
         if (answer.isDecisive()) { // 진단 결과 안내
+            if (question.getId() == 332 & answer.getAnswerId() == 1 & request.getUnknownEmergency() == 1) { // 원인 불명의 안과질환 판별
+                return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(1033, "원인 불명의 안과질환")).build();
+            }
             return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(answer.getResultId(), answer.getResult())).build();
         }
         else { // 다음 질문
@@ -243,6 +253,16 @@ public class HeadacheQuestionService {
         //다음 질문이 존재할 때
         if (!answer.isDecisive()) {
             int nextQuestionId = answer.getNextQuestionId(); //다음 질문 id
+
+            // type 4: 일차성 두통 감별로직 공통질문 요청
+            if (nextQuestionId == 0) {
+                int unknownEmergency = 0;
+
+                if (questionId == 406 & answerId == 0) { // 원인 불명의 안과질환 가능성 판별
+                    unknownEmergency = 1;
+                }
+                return new HeadachePainAreaNextResponse(4, "일차성 두통 감별로직 공통질문을 요청하세요", unknownEmergency);
+            }
 
             // type 3: 통증 수치 질문
             if (Arrays.stream(PAIN_LEVEL_CHECK_QUESTION).anyMatch(i -> i == nextQuestionId)) {
