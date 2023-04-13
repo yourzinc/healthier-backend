@@ -135,11 +135,14 @@ public class HeadacheQuestionService {
     /**
      * 일차성 두통 질문 응답
      */
-    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(QnARequest request) {
+    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(PrimaryHeadacheNextRequest request) {
         Question question = questionRepository.findById(request.getQuestionId()).get();
         Answer answer = question.getAnswers().get(request.getAnswerId());
 
         if (answer.isDecisive()) { // 진단 결과 안내
+            if (question.getId() == 332 & answer.getAnswerId() == 1 & request.getUnknownEmergency() == 1) { // 원인 불명의 안과질환 판별
+                return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(1033, "원인 불명의 안과질환")).build();
+            }
             return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(answer.getResultId(), answer.getResult())).build();
         }
         else { // 다음 질문

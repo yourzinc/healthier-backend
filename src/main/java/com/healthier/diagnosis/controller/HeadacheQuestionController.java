@@ -70,7 +70,7 @@ public class HeadacheQuestionController {
      * 일차성 두통 공통 질문 응답
      */
     @PostMapping("/primary-headache/next")
-    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid QnARequest request) {
+    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid PrimaryHeadacheNextRequest request) {
         return questionService.findPrimaryHeadacheNextQuestion(request);
     }
 
