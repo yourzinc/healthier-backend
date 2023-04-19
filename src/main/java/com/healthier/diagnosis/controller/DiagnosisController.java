@@ -7,14 +7,18 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequiredArgsConstructor
-@RequestMapping(value="/api/diagnosis")
+@RequestMapping(value="/api")
 @RestController
 public class DiagnosisController {
     private final DiagnosisService diagnosisService;
 
-    @GetMapping(value = "/results/{id}")
+    @GetMapping(value = "/diagnosis/results/{id}")
     public ResponseEntity<?> getDiagnosis(@PathVariable String id) {
         return ResponseEntity.ok(diagnosisService.findDiagnosis(id));
     }
 
+    @GetMapping(value = "/v2/diagnose/headache/results/{id}")
+    public ResponseEntity<?> getHeadacheDiagnosisResultDetail(@PathVariable int id) {
+        return ResponseEntity.ok(diagnosisService.getHeadacheResultDetail(id));
+    }
 }
