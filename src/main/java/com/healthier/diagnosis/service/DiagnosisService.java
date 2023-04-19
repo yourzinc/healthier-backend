@@ -5,10 +5,7 @@ import com.healthier.diagnosis.domain.log.Log;
 import com.healthier.diagnosis.domain.user.Track;
 import com.healthier.diagnosis.dto.DiagnosisResponseDto;
 import com.healthier.diagnosis.dto.headache.ResultDto;
-import com.healthier.diagnosis.dto.headache.result.HeadacheResult;
-import com.healthier.diagnosis.dto.headache.result.HeadacheResultDto;
-import com.healthier.diagnosis.dto.headache.result.HeadacheResultRequest;
-import com.healthier.diagnosis.dto.headache.result.HeadacheResultResponse;
+import com.healthier.diagnosis.dto.headache.result.*;
 import com.healthier.diagnosis.exception.CustomException;
 import com.healthier.diagnosis.exception.ErrorCode;
 import com.healthier.diagnosis.repository.DiagnosisLogRepository;
@@ -242,4 +239,17 @@ public class DiagnosisService {
         }
     }
 
+
+    /**
+     * 두통 진단 결과 상세 조회
+     */
+    public ResultDetail getHeadacheResultDetail(int resultId) {
+        Diagnosis diagnosis = diagnosisRepository.findByNewId(resultId)
+                .orElseThrow(()-> new CustomException(ErrorCode.DIAGNOSIS_NOT_FOUND));
+
+        return ResultDetail.builder()
+                .isResult(1)
+                .diagnosticResult(new ResultDetailDto(diagnosis))
+                .build();
+    }
 }
