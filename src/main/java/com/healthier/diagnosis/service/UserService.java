@@ -107,7 +107,7 @@ public class UserService {
 
             User.ResponseRecord response_record = User.ResponseRecord.builder()
                     .Record(record)
-                    .banner_illustration(diagnosis.getBanner_illustration())
+                    .banner_illustration(diagnosis.getBannerIllustration())
                     .build();
 
             response_records.add(response_record);
@@ -158,7 +158,7 @@ public class UserService {
 
             User.ResponseRecord response_record = User.ResponseRecord.builder()
                     .Record(my_record)
-                    .banner_illustration(my_diagnosis.getBanner_illustration())
+                    .banner_illustration(my_diagnosis.getBannerIllustration())
                     .build();
 
             response_records.add(response_record);

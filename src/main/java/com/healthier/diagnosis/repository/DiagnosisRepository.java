@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface DiagnosisRepository extends MongoRepository<Diagnosis, String> {
     Optional<Diagnosis> findById(@Param("id") String id);
+    Optional<Diagnosis> findByNewId(@Param("newId") int id);
 }

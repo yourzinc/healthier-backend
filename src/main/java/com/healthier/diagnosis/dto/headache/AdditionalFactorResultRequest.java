@@ -2,21 +2,19 @@ package com.healthier.diagnosis.dto.headache;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import java.util.List;
+
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ResultDto {
-    private int resultId;
-    private String result;
-
-    protected ResultDto() {}
-
-    public ResultDto(int resultId, String result) {
-        this.resultId = resultId;
-        this.result = result;
-    }
+public class AdditionalFactorResultRequest {
+    private int questionId;
+    private int [] answerId;
 }
-
