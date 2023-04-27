@@ -3,7 +3,7 @@ package com.healthier.diagnosis.service;
 import com.healthier.diagnosis.domain.diagnosis.Diagnosis;
 import com.healthier.diagnosis.domain.log.Log;
 import com.healthier.diagnosis.domain.user.Track;
-import com.healthier.diagnosis.dto.DiagnosisResponseDto;
+import com.healthier.diagnosis.dto.question.DiagnosisResponseDto;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.dto.headache.result.*;
 import com.healthier.diagnosis.exception.CustomException;

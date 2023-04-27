@@ -1,7 +1,9 @@
 package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.user.Track;
-import com.healthier.diagnosis.dto.*;
+import com.healthier.diagnosis.dto.question.*;
+import com.healthier.diagnosis.dto.question.decisiveQuestion.DecisiveQuestionRequestDto;
+import com.healthier.diagnosis.dto.question.headache.HeadacheDefaultQuestionAfterRequestDto;
 import com.healthier.diagnosis.repository.QuestionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
