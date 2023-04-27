@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 public class HeadacheQuestionService {
     private final HeadacheQuestionRepository questionRepository;
     private static final int [] PAIN_LEVEL_CHECK_QUESTION = { 404, 405, 406 };
+    private static final int RED_FLAG_SIGN_RESULT_ID = 1031;
+    private static final int UNKNOWN_EYE_DISEASE_RESULT_ID = 1033;
 
     /**
      * 두통 기본 질문 조회
@@ -54,7 +56,7 @@ public class HeadacheQuestionService {
     public RedFlagSignResponse findRedFlagSignResult(RedFlagSignRequest request) {
         // type 1: Red Flag Sign 진단
         if (isRedFlagSign(request)) {
-            return RedFlagSignResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
+            return RedFlagSignResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(RED_FLAG_SIGN_RESULT_ID, "두통의 위험 신호 (RED FLAG SIGN)")).build();
         }
 
         boolean isChronic = isChronicPain(request);
@@ -68,13 +70,8 @@ public class HeadacheQuestionService {
         List<Question> questions = questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
         List<QuestionDto> questionDtos = getQuestionDtos(questions);
 
-        //  type 2: 만성 일차성 두통 공통 질문
-        if (isChronic) {
-            return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
-        }
-
-        // type 2: 일차성 두통 공통 질문
-        return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("일차성 두통 공통 질문").questions(questionDtos).build();
+        //  type 2: 두통 공통 질문
+        return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message(isChronic ? "만성 일차성 두통 공통 질문" : "일차성 두통 공통 질문").questions(questionDtos).build();
     }
 
     /**
@@ -139,7 +136,7 @@ public class HeadacheQuestionService {
 
         if (answer.isDecisive()) { // 진단 결과 안내
             if (question.getId() == 332 & answer.getAnswerId() == 1 & request.getUnknownEmergency() == 1) { // type 2 - 예외: 원인 불명의 안과 질환
-                return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(1033, "원인 불명의 안과질환")).build();
+                return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(UNKNOWN_EYE_DISEASE_RESULT_ID, "원인 불명의 안과질환")).build();
             }
             // type 2: 진단 결과 안내
             return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(answer.getResultId(), answer.getResult())).build();
