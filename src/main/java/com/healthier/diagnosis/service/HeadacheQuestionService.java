@@ -2,10 +2,10 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
-import com.healthier.diagnosis.domain.question.PainArea;
+import com.healthier.diagnosis.domain.headache.PainArea;
 import com.healthier.diagnosis.dto.headache.HeadacheResponse;
 import com.healthier.diagnosis.dto.headache.ResultDto;
-import com.healthier.diagnosis.domain.question.Type;
+import com.healthier.diagnosis.domain.headache.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
 import com.healthier.diagnosis.dto.headache.primaryHeadache.*;
 import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextRequest;
