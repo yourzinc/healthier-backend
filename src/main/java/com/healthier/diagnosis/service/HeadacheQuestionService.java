@@ -47,16 +47,19 @@ public class HeadacheQuestionService {
 
     /**
      * 두통 Red Flag Sign 결과
+     * type 1 : Red Flag Sign 진단
+     * type 2 : 두통 공통 질문 (일차성 / 만성 일차성)
+     * type 3 : 기타 부위 질문 요청 메시지
      */
     public RedFlagSignResponse findRedFlagSignResult(RedFlagSignRequest request) {
-        // Red Flag Sign 진단
+        // type 1: Red Flag Sign 진단
         if (isRedFlagSign(request)) {
             return RedFlagSignResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
         }
 
         boolean isChronic = isChronicPain(request);
 
-        // 기타 부위 질문 요청 메시지
+        // type 3: 기타 부위 질문 요청 메시지
         List painAreas = request.getPainArea();
         if (painAreas.contains(PainArea.EYES.label()) || painAreas.contains(PainArea.BACKOFNECK.label()) || painAreas.contains(PainArea.CHIN) || painAreas.contains(PainArea.FACIALSKIN.label())) {
             return RedFlagSignResponse.builder().type(3).isChronic(isChronic ? 1 : 0).message("선택한 통증 부위 중 하나를 요청하세요").build();
@@ -65,12 +68,12 @@ public class HeadacheQuestionService {
         List<Question> questions = questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
         List<QuestionDto> questionDtos = getQuestionDtos(questions);
 
-        //  만성 일차성 두통 공통 질문
+        //  type 2: 만성 일차성 두통 공통 질문
         if (isChronic) {
             return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
         }
 
-        // 일차성 두통 공통 질문
+        // type 2: 일차성 두통 공통 질문
         return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("일차성 두통 공통 질문").questions(questionDtos).build();
     }
 
@@ -83,21 +86,8 @@ public class HeadacheQuestionService {
 
     /**
      * 일차성 두통 공통 질문 결과
-     *
-     * [일차성 두통 공통 질문 점수 계산 로직]
-     *
-     * <선택 가능 범위>
-     * 예 -> (DB) 0 (연산) -1 // 한 질문에서 편두통과 긴장이 동일한 득점을 얻는 경우 정확한 계산을 하기 위함
-     * 아니오 -> (DB & 연산) +1
-     *
-     * <득점 케이스>
-     * 주로 편두통(-1) vs 군발 / 긴장(+1)
-     * 특히 편두통(-1) / 긴장(+1) vs 군발(+1) 의 경우
-     *
-     * <판단 기준>
-     * -> 값이 양수냐~ 음수냐~
-     * if (point > 0) 긴장성 질문
-     * if (point <= 0) 편두통 질문 // 동점이면 편두통 질문
+     * type 1 : 편두통 질문
+     * type 2 : 긴장성/군발성 두통 질문
      */
     public HeadacheResponse findPrimaryHeadacheQuestion(PrimaryHeadacheRequest request) {
         // 공통 질문 301,302,304번 포인트 계산
@@ -127,10 +117,10 @@ public class HeadacheQuestionService {
         // 만성 일차성 두통 - 편두통/긴장 ++ -> point 처리 X
 
         // 편두통 vs 긴장 판별
-        if (point > 0) { // 긴장성 두통 질문
+        if (point > 0) { // type 2: 긴장성/군발성 두통 질문
             return getHeadacheResponse(320, 2, "긴장성/군발성 두통 질문");
         }
-        else { // 편두통 질문
+        else { // type 1: 편두통 질문
             return getHeadacheResponse(310, 1, "편두통 질문");
 
         }
@@ -139,18 +129,22 @@ public class HeadacheQuestionService {
 
     /**
      * 일차성 두통 질문 응답
+     * type 1 : 다음 질문
+     * type 2 : 진단 결과 안내
+     * type 2 - 예외: 원인 불명의 안과 질환
      */
     public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(PrimaryHeadacheNextRequest request) {
         Question question = questionRepository.findById(request.getQuestionId()).get();
         Answer answer = question.getAnswers().get(request.getAnswerId());
 
         if (answer.isDecisive()) { // 진단 결과 안내
-            if (question.getId() == 332 & answer.getAnswerId() == 1 & request.getUnknownEmergency() == 1) { // 원인 불명의 안과질환 판별
+            if (question.getId() == 332 & answer.getAnswerId() == 1 & request.getUnknownEmergency() == 1) { // type 2 - 예외: 원인 불명의 안과 질환
                 return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(1033, "원인 불명의 안과질환")).build();
             }
+            // type 2: 진단 결과 안내
             return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(answer.getResultId(), answer.getResult())).build();
         }
-        else { // 다음 질문
+        else { // type 1: 다음 질문
             List<Question> questions = new ArrayList<>();
             questions.add(questionRepository.findById(answer.getNextQuestionId()).get());
 
