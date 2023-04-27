@@ -46,8 +46,16 @@ public class HeadacheQuestionController {
      * 두통 Red Flag Sign 결과
      */
     @PostMapping("/red-flag-sign")
-    public HeadacheResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
+    public RedFlagSignResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
         return questionService.findRedFlagSignResult(request);
+    }
+
+    /**
+     * 일차성 두통 감별로직 공통질문
+     */
+    @GetMapping("/primary-headache")
+    public QuestionResponse GetPrimaryHeadacheQuestion() {
+        return new QuestionResponse(questionService.getPrimaryHeadacheQuestion());
     }
 
     /**
@@ -62,7 +70,7 @@ public class HeadacheQuestionController {
      * 일차성 두통 공통 질문 응답
      */
     @PostMapping("/primary-headache/next")
-    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid QnARequest request) {
+    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid PrimaryHeadacheNextRequest request) {
         return questionService.findPrimaryHeadacheNextQuestion(request);
     }
 

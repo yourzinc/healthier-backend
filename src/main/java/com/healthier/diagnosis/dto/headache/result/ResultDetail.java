@@ -1,18 +1,16 @@
-package com.healthier.diagnosis.dto.headache.commonQuestion;
+package com.healthier.diagnosis.dto.headache.result;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
+@Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class PrimaryHeadacheRequest {
-    private List<QnARequest> questions;
-    private int isChronic;
-    private String message;
+public class ResultDetail {
+    private int isResult;
+    private ResultDetailDto diagnosticResult;
 }

@@ -2,6 +2,7 @@ package com.healthier.diagnosis.service;
 
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
+import com.healthier.diagnosis.domain.question.PainArea;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.domain.question.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HeadacheQuestionService {
     private final HeadacheQuestionRepository questionRepository;
+    private static final int [] PAIN_LEVEL_CHECK_QUESTION = { 404, 405, 406 };
 
     /**
      * 두통 기본 질문 조회
@@ -41,28 +43,37 @@ public class HeadacheQuestionService {
     /**
      * 두통 Red Flag Sign 결과
      */
-    public HeadacheResponse findRedFlagSignResult(RedFlagSignRequest request) {
+    public RedFlagSignResponse findRedFlagSignResult(RedFlagSignRequest request) {
         // Red Flag Sign 진단
         if (isRedFlagSign(request)) {
-            return HeadacheResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
+            return RedFlagSignResponse.builder().type(1).message("RED FLAG SIGN").result(new ResultDto(1031, "두통의 위험 신호 (RED FLAG SIGN)")).build();
         }
+
+        boolean isChronic = isChronicPain(request);
 
         // 기타 부위 질문 요청 메시지
         List painAreas = request.getPainArea();
-        if (painAreas.contains("눈") || painAreas.contains("뒷목") || painAreas.contains("턱") || painAreas.contains("얼굴피부")) {
-            return HeadacheResponse.builder().type(4).message("선택한 통증 부위 중 하나를 요청하세요").build();
+        if (painAreas.contains(PainArea.EYES.label()) || painAreas.contains(PainArea.BACKOFNECK.label()) || painAreas.contains(PainArea.CHIN) || painAreas.contains(PainArea.FACIALSKIN.label())) {
+            return RedFlagSignResponse.builder().type(3).isChronic(isChronic ? 1 : 0).message("선택한 통증 부위 중 하나를 요청하세요").build();
         }
 
         List<Question> questions = questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
         List<QuestionDto> questionDtos = getQuestionDtos(questions);
 
         //  만성 일차성 두통 공통 질문
-        if (isChronicPain(request)) {
-            return HeadacheResponse.builder().type(3).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
+        if (isChronic) {
+            return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("만성 일차성 두통 공통 질문").questions(questionDtos).build();
         }
 
         // 일차성 두통 공통 질문
-        return HeadacheResponse.builder().type(2).message("일차성 두통 공통 질문").questions(questionDtos).build();
+        return RedFlagSignResponse.builder().type(2).isChronic(isChronic ? 1 : 0).message("일차성 두통 공통 질문").questions(questionDtos).build();
+    }
+
+    /**
+     * 일차성 두통 감별로직 공통질문
+     */
+    public List<Question> getPrimaryHeadacheQuestion() {
+        return questionRepository.findByType(Type.PRIMARYHEADACHEC.label());
     }
 
     /**
@@ -105,7 +116,7 @@ public class HeadacheQuestionService {
         if (question303.getAnswerId() == 1) { // 군발 ++
             point ++;
         }
-        else if (request.getType() == 2) { // 일차성 두통 - 편두통 ++
+        else if (request.getIsChronic() == 0) { // 일차성 두통 - 편두통 ++
             point --;
         }
         // 만성 일차성 두통 - 편두통/긴장 ++ -> point 처리 X
@@ -124,11 +135,14 @@ public class HeadacheQuestionService {
     /**
      * 일차성 두통 질문 응답
      */
-    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(QnARequest request) {
+    public PrimaryHeadacheNextResponse findPrimaryHeadacheNextQuestion(PrimaryHeadacheNextRequest request) {
         Question question = questionRepository.findById(request.getQuestionId()).get();
         Answer answer = question.getAnswers().get(request.getAnswerId());
 
         if (answer.isDecisive()) { // 진단 결과 안내
+            if (question.getId() == 332 & answer.getAnswerId() == 1 & request.getUnknownEmergency() == 1) { // 원인 불명의 안과질환 판별
+                return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(1033, "원인 불명의 안과질환")).build();
+            }
             return PrimaryHeadacheNextResponse.builder().type(2).result(new PrimaryHeadacheNextResponse.Result(answer.getResultId(), answer.getResult())).build();
         }
         else { // 다음 질문
@@ -230,6 +244,7 @@ public class HeadacheQuestionService {
      * 특정 통증 부위 다음 질문 조회
      * type 1 : 다음 질문
      * type 2 : 진단 결과 안내
+     * type 3 : ID - 404, 405, 406 (통증 수치 질문) 반환
      */
     public HeadachePainAreaNextResponse findPainAreaNextQuestion(int questionId, int answerId) {
         Optional<Question> question = questionRepository.findById(questionId);
@@ -238,10 +253,28 @@ public class HeadacheQuestionService {
         //다음 질문이 존재할 때
         if (!answer.isDecisive()) {
             int nextQuestionId = answer.getNextQuestionId(); //다음 질문 id
-            return new HeadachePainAreaNextResponse(questionRepository.findById(nextQuestionId).get());
+
+            // type 4: 일차성 두통 감별로직 공통질문 요청
+            if (nextQuestionId == 0) {
+                int unknownEmergency = 0;
+
+                if (questionId == 406 & answerId == 0) { // 원인 불명의 안과질환 가능성 판별
+                    unknownEmergency = 1;
+                }
+                return new HeadachePainAreaNextResponse(4, "일차성 두통 감별로직 공통질문을 요청하세요", unknownEmergency);
+            }
+
+            // type 3: 통증 수치 질문
+            if (Arrays.stream(PAIN_LEVEL_CHECK_QUESTION).anyMatch(i -> i == nextQuestionId)) {
+                return new HeadachePainAreaNextResponse(3, questionRepository.findById(nextQuestionId).get());
+            }
+            // type 1: 일반 질문
+            else {
+                return new HeadachePainAreaNextResponse(1, questionRepository.findById(nextQuestionId).get());
+            }
         }
 
-        //다음 질문이 존재하지 않을 때
+        // type 2: 진단 결과 안내
         else {
             return new HeadachePainAreaNextResponse(answer.getResultId(), answer.getResult());
         }
