@@ -1,10 +1,15 @@
 package com.healthier.diagnosis.controller;
 
 import com.healthier.diagnosis.domain.headache.Question;
-import com.healthier.diagnosis.dto.headache.AdditionalFactorResultRequest;
+import com.healthier.diagnosis.dto.headache.additionalFactor.AdditionalFactorResultRequest;
+import com.healthier.diagnosis.dto.headache.HeadacheResponse;
 import com.healthier.diagnosis.dto.headache.QuestionResponse;
 import com.healthier.diagnosis.dto.headache.ResultResponse;
-import com.healthier.diagnosis.dto.headache.commonQuestion.*;
+import com.healthier.diagnosis.dto.headache.primaryHeadache.*;
+import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextRequest;
+import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextResponse;
+import com.healthier.diagnosis.dto.headache.redFlagSign.RedFlagSignRequest;
+import com.healthier.diagnosis.dto.headache.redFlagSign.RedFlagSignResponse;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;

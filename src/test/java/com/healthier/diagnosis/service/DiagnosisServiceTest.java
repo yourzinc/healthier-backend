@@ -1,6 +1,6 @@
 package com.healthier.diagnosis.service;
 
-import com.healthier.diagnosis.dto.DiagnosisResponseDto;
+import com.healthier.diagnosis.dto.question.DiagnosisResponseDto;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.dto.headache.result.HeadacheResultResponse;
 import com.healthier.diagnosis.dto.headache.result.ResultDetail;

@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto;
+package com.healthier.diagnosis.dto.question.saveDiagnosis;
 
 import com.healthier.diagnosis.domain.user.User;
 import lombok.*;

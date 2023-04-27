@@ -3,10 +3,15 @@ package com.healthier.diagnosis.service;
 import com.healthier.diagnosis.domain.headache.Answer;
 import com.healthier.diagnosis.domain.headache.Question;
 import com.healthier.diagnosis.domain.question.PainArea;
+import com.healthier.diagnosis.dto.headache.HeadacheResponse;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.domain.question.Type;
 import com.healthier.diagnosis.dto.headache.QuestionDto;
-import com.healthier.diagnosis.dto.headache.commonQuestion.*;
+import com.healthier.diagnosis.dto.headache.primaryHeadache.*;
+import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextRequest;
+import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextResponse;
+import com.healthier.diagnosis.dto.headache.redFlagSign.RedFlagSignRequest;
+import com.healthier.diagnosis.dto.headache.redFlagSign.RedFlagSignResponse;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
 import com.healthier.diagnosis.repository.HeadacheQuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -96,10 +101,10 @@ public class HeadacheQuestionService {
      */
     public HeadacheResponse findPrimaryHeadacheQuestion(PrimaryHeadacheRequest request) {
         // 공통 질문 301,302,304번 포인트 계산
-        List<QnARequest> pointQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() != 303).collect(Collectors.toList());
+        List<PrimaryHeadacheRequest.QnARequest> pointQuestions = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() != 303).collect(Collectors.toList());
         int point = 0;
 
-        for (QnARequest q : pointQuestions) {
+        for (PrimaryHeadacheRequest.QnARequest q : pointQuestions) {
             if (q.getAnswerId() == 1) { // 군발/긴장 ++
                 point ++;
             }
@@ -112,7 +117,7 @@ public class HeadacheQuestionService {
         }
 
         // 공통 질문 303번 포인트 계산
-        QnARequest question303 = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 303).findAny().get();
+        PrimaryHeadacheRequest.QnARequest question303 = request.getQuestions().stream().filter(qnA -> qnA.getQuestionId() == 303).findAny().get();
         if (question303.getAnswerId() == 1) { // 군발 ++
             point ++;
         }
@@ -253,16 +258,6 @@ public class HeadacheQuestionService {
         //다음 질문이 존재할 때
         if (!answer.isDecisive()) {
             int nextQuestionId = answer.getNextQuestionId(); //다음 질문 id
-
-            // type 4: 일차성 두통 감별로직 공통질문 요청
-            if (nextQuestionId == 0) {
-                int unknownEmergency = 0;
-
-                if (questionId == 406 & answerId == 0) { // 원인 불명의 안과질환 가능성 판별
-                    unknownEmergency = 1;
-                }
-                return new HeadachePainAreaNextResponse(4, "일차성 두통 감별로직 공통질문을 요청하세요", unknownEmergency);
-            }
 
             // type 3: 통증 수치 질문
             if (Arrays.stream(PAIN_LEVEL_CHECK_QUESTION).anyMatch(i -> i == nextQuestionId)) {

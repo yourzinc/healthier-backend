@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto.headache;
+package com.healthier.diagnosis.dto.headache.additionalFactor;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
