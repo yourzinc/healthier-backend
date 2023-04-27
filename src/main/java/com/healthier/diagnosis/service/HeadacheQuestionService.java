@@ -244,6 +244,7 @@ public class HeadacheQuestionService {
      * type 1 : 다음 질문
      * type 2 : 진단 결과 안내
      * type 3 : ID - 404, 405, 406 (통증 수치 질문) 반환
+     * type 4 : 일차성 두통 감별로직 공통질문 요청
      */
     public HeadachePainAreaNextResponse findPainAreaNextQuestion(int questionId, int answerId) {
         Optional<Question> question = questionRepository.findById(questionId);
@@ -252,6 +253,16 @@ public class HeadacheQuestionService {
         //다음 질문이 존재할 때
         if (!answer.isDecisive()) {
             int nextQuestionId = answer.getNextQuestionId(); //다음 질문 id
+
+            // type 4: 일차성 두통 감별로직 공통질문 요청
+            if (nextQuestionId == 0) {
+                int unknownEmergency = 0;
+
+                if (questionId == 406 & answerId == 0) { // 원인 불명의 안과질환 가능성 판별
+                    unknownEmergency = 1;
+                }
+                return new HeadachePainAreaNextResponse(4, "일차성 두통 감별로직 공통질문을 요청하세요", unknownEmergency);
+            }
 
             // type 3: 통증 수치 질문
             if (Arrays.stream(PAIN_LEVEL_CHECK_QUESTION).anyMatch(i -> i == nextQuestionId)) {
