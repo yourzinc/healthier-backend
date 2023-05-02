@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto;
+package com.healthier.diagnosis.dto.question.headache;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -8,18 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class FirstQuestionRequestDto {
+public class HeadacheDefaultQuestionAfterRequestDto {
     @NotNull
-    private String answer;
-    private int scoreB;  // 수면 위생 점수
-    private int birthYear;
-    private String gender;
-    private List<Integer> interests;
+    private int siteId;
 }

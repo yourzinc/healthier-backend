@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto;
+package com.healthier.diagnosis.dto.question;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.healthier.diagnosis.domain.diagnosis.Diagnosis;

@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto;
+package com.healthier.diagnosis.dto.question.saveDiagnosis;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

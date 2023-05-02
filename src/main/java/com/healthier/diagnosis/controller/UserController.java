@@ -1,12 +1,11 @@
 package com.healthier.diagnosis.controller;
 
 import com.healthier.diagnosis.domain.oauth.JwtProperties;
-import com.healthier.diagnosis.dto.SaveDiagnosisRequestDto;
+import com.healthier.diagnosis.dto.question.saveDiagnosis.SaveDiagnosisRequestDto;
 import com.healthier.diagnosis.security.jwt.JwtTokenProvider;
 import com.healthier.diagnosis.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

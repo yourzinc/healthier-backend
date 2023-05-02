@@ -1,5 +1,6 @@
-package com.healthier.diagnosis.dto;
+package com.healthier.diagnosis.dto.question;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class HeadacheDefaultQuestionAfterRequestDto {
+public class QuestionRequestDto {
     @NotNull
-    private int siteId;
+    private String questionId;
+
+    @NotNull
+    private int answerId;
 }

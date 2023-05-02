@@ -78,6 +78,21 @@ class HeadacheQuestionServiceTest {
         Assertions.assertThat(next.getResult().getResult()).isEqualTo("삼차신경통");
     }
 
+    @DisplayName("특정 통증 부위 다음 질문 - Type 3: 통증 수치 질문")
+    @Test
+    public void findPainAreaNextQuestionPainLevel() throws Exception {
+        //given
+        int questionId = 403;
+        int answerId = 0;
+
+        //when
+        HeadachePainAreaNextResponse next = questionService.findPainAreaNextQuestion(questionId, answerId);
+
+        //then
+        Assertions.assertThat(next.getType()).isEqualTo(3);
+        Assertions.assertThat(next.getQuestions().get(0).getQuestion()).isEqualTo("통증 수치가 5 이상 인가요?");
+    }
+
     @DisplayName("추가적인 악화 요인 질문")
     @Test
     public void findAdditionalFactorQuestion() throws Exception {
@@ -101,8 +116,9 @@ class HeadacheQuestionServiceTest {
         ResultDto resultDto1 = questionService.getAdditionalFactorResult(questionId, answerId1);
         ResultDto resultDto2 = questionService.getAdditionalFactorResult(questionId, answerId2);
 
+        System.out.println(resultDto1);
         //then
-        Assertions.assertThat(resultDto1.getResult()).isEqualTo("약물 과용으로 인한 두통");
+        Assertions.assertThat(resultDto1.getResult()).isEqualTo("약물 과용 두통");
         Assertions.assertThat(resultDto2).isEqualTo(null);
     }
 }

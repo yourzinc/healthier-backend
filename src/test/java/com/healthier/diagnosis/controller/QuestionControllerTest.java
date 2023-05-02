@@ -1,9 +1,8 @@
 package com.healthier.diagnosis.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.healthier.diagnosis.dto.DecisiveQuestionRequestDto;
-import com.healthier.diagnosis.dto.FirstQuestionRequestDto;
-import com.healthier.diagnosis.dto.QuestionRequestDto;
+import com.healthier.diagnosis.dto.question.decisiveQuestion.DecisiveQuestionRequestDto;
+import com.healthier.diagnosis.dto.question.QuestionRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

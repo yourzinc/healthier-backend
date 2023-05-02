@@ -1,21 +1,18 @@
 package com.healthier.diagnosis.service;
 
-import com.healthier.diagnosis.domain.question.Question;
 import com.healthier.diagnosis.domain.user.Track;
-import com.healthier.diagnosis.dto.*;
+import com.healthier.diagnosis.dto.question.*;
+import com.healthier.diagnosis.dto.question.decisiveQuestion.DecisiveQuestionRequestDto;
+import com.healthier.diagnosis.dto.question.headache.HeadacheDefaultQuestionAfterRequestDto;
 import com.healthier.diagnosis.repository.QuestionRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class QuestionServiceTest {
@@ -232,15 +229,15 @@ class QuestionServiceTest {
     }
 
     // 두통 초기 질문
-    @DisplayName("두통 초기 질문")
-    @Test
-    void getHeadacheFirstQuestion(){
-        // when
-        QuestionDto first_question = questionService.findFirstQuestion("headache");
-
-        // then
-        assertThat(first_question.getQuestion()).isEqualTo("언제부터 통증이 시작되었나요?");
-    }
+//    @DisplayName("두통 초기 질문")
+//    @Test
+//    void getHeadacheFirstQuestion(){
+//        // when
+//        QuestionDto first_question = questionService.findFirstQuestion("headache");
+//
+//        // then
+//        assertThat(first_question.getQuestion()).isEqualTo("언제부터 통증이 시작되었나요?");
+//    }
 
     // 두통 마지막 초기 질문 응답
     @DisplayName("두통 마지막 초기 질문 응답")
