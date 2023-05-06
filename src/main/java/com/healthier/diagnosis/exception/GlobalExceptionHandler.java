@@ -1,6 +1,6 @@
 package com.healthier.diagnosis.exception;
 
-import com.healthier.diagnosis.dto.ErrorResponseDto;
+import com.healthier.diagnosis.dto.question.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

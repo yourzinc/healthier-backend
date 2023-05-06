@@ -1,10 +1,15 @@
 package com.healthier.diagnosis.controller;
 
 import com.healthier.diagnosis.domain.headache.Question;
-import com.healthier.diagnosis.dto.headache.AdditionalFactorResultRequest;
+import com.healthier.diagnosis.dto.headache.additionalFactor.AdditionalFactorResultRequest;
+import com.healthier.diagnosis.dto.headache.HeadacheResponse;
 import com.healthier.diagnosis.dto.headache.QuestionResponse;
 import com.healthier.diagnosis.dto.headache.ResultResponse;
-import com.healthier.diagnosis.dto.headache.commonQuestion.*;
+import com.healthier.diagnosis.dto.headache.primaryHeadache.*;
+import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextRequest;
+import com.healthier.diagnosis.dto.headache.primaryHeadacheNext.PrimaryHeadacheNextResponse;
+import com.healthier.diagnosis.dto.headache.redFlagSign.RedFlagSignRequest;
+import com.healthier.diagnosis.dto.headache.redFlagSign.RedFlagSignResponse;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextResponse;
@@ -46,8 +51,16 @@ public class HeadacheQuestionController {
      * 두통 Red Flag Sign 결과
      */
     @PostMapping("/red-flag-sign")
-    public HeadacheResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
+    public RedFlagSignResponse RedFlagSignQuestion(@RequestBody @Valid RedFlagSignRequest request) {
         return questionService.findRedFlagSignResult(request);
+    }
+
+    /**
+     * 일차성 두통 감별로직 공통질문
+     */
+    @GetMapping("/primary-headache")
+    public QuestionResponse GetPrimaryHeadacheQuestion() {
+        return new QuestionResponse(questionService.getPrimaryHeadacheQuestion());
     }
 
     /**
@@ -62,7 +75,7 @@ public class HeadacheQuestionController {
      * 일차성 두통 공통 질문 응답
      */
     @PostMapping("/primary-headache/next")
-    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid QnARequest request) {
+    public PrimaryHeadacheNextResponse PrimaryHeadacheNextQuestion(@RequestBody @Valid PrimaryHeadacheNextRequest request) {
         return questionService.findPrimaryHeadacheNextQuestion(request);
     }
 

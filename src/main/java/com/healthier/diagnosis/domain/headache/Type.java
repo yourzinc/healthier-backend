@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.domain.question;
+package com.healthier.diagnosis.domain.headache;
 
 public enum Type {
     BASIC("basic"),

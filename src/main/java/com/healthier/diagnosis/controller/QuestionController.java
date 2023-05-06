@@ -1,6 +1,8 @@
 package com.healthier.diagnosis.controller;
 
-import com.healthier.diagnosis.dto.*;
+import com.healthier.diagnosis.dto.question.decisiveQuestion.DecisiveQuestionRequestDto;
+import com.healthier.diagnosis.dto.question.headache.HeadacheDefaultQuestionAfterRequestDto;
+import com.healthier.diagnosis.dto.question.QuestionRequestDto;
 import com.healthier.diagnosis.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto.headache.commonQuestion;
+package com.healthier.diagnosis.dto.headache.redFlagSign;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -12,9 +12,10 @@ import java.util.List;
 @Data
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class HeadacheResponse {
+public class RedFlagSignResponse {
     private int type;
     private String message;
     private List<QuestionDto> questions;
     private ResultDto result;
+    private int isChronic;
 }

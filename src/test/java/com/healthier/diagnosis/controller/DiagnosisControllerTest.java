@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +33,14 @@ class DiagnosisControllerTest {
     void getDiagnosis() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diagnosis/results/62cd703fe49face142d9cffe").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.diagnostic_result.id").value("62cd703fe49face142d9cffe"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("두통 진단 결과 상세")
+    @Test
+    public void getHeadacheDiagnosisResultDetail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v2/diagnose/headache/results/1025").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.diagnostic_result.id").value(1025))
                 .andExpect(status().isOk());
     }
 }

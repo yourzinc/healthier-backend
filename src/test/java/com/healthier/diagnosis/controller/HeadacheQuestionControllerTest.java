@@ -1,7 +1,7 @@
 package com.healthier.diagnosis.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.healthier.diagnosis.dto.headache.AdditionalFactorResultRequest;
+import com.healthier.diagnosis.dto.headache.additionalFactor.AdditionalFactorResultRequest;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaFirstRequest;
 import com.healthier.diagnosis.dto.headache.painArea.HeadachePainAreaNextRequest;

@@ -1,8 +1,10 @@
 package com.healthier.diagnosis.service;
 
-import com.healthier.diagnosis.dto.DiagnosisResponseDto;
+import com.healthier.diagnosis.dto.question.DiagnosisResponseDto;
 import com.healthier.diagnosis.dto.headache.ResultDto;
 import com.healthier.diagnosis.dto.headache.result.HeadacheResultResponse;
+import com.healthier.diagnosis.dto.headache.result.ResultDetail;
+import com.healthier.diagnosis.exception.CustomException;
 import com.healthier.diagnosis.repository.DiagnosisRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class DiagnosisServiceTest {
@@ -103,5 +107,30 @@ class DiagnosisServiceTest {
         //thens
         Assertions.assertThat(resultPriority.getResults().getSuspicious().get(0).getContent()).isEqualTo("대후두 신경통");
         Assertions.assertThat(resultPriority.getResults().getPredicted().get(0).getContent()).isEqualTo("약물 과용으로 인한 두통");
+    }
+
+    @DisplayName("두통 진단 결과 상세 조회- O")
+    @Test
+    public void getHeadacheResultDetailTest1() throws Exception {
+        //given
+        int resultId = 1025;
+
+        //when
+        ResultDetail headacheResultDetail = diagnosisService.getHeadacheResultDetail(resultId);
+
+        //then
+        Assertions.assertThat(headacheResultDetail.getDiagnosticResult().getId()).isEqualTo(1025);
+    }
+
+    @DisplayName("두통 진단 결과 상세 조회- X 존재하지 않는 경우")
+    @Test
+    public void getHeadacheResultDetailTest2() throws Exception {
+        //given
+        int resultId = 2025;
+
+        //when
+        Throwable exception = assertThrows(CustomException.class, () -> diagnosisService.getHeadacheResultDetail(resultId));
+
+        assertEquals(exception.getMessage(), "해당 진단 정보를 찾을 수 없습니다.");
     }
 }

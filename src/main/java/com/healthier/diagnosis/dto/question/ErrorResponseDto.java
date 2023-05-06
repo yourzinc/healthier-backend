@@ -1,4 +1,4 @@
-package com.healthier.diagnosis.dto;
+package com.healthier.diagnosis.dto.question;
 
 import com.healthier.diagnosis.exception.ErrorCode;
 import lombok.Builder;
