@@ -11,6 +11,3 @@
 ## 기능 및 화면
 <img width="1366" alt="스크린샷 2022-08-16 12 50 51" src="https://user-images.githubusercontent.com/76840145/184794198-d916e749-e52b-4d32-afcd-d7da587a72ea.png">
 <img width="1366" alt="스크린샷 2022-08-16 12 51 01" src="https://user-images.githubusercontent.com/76840145/184794203-d251df79-1420-4ea8-affd-8d1a1269a49c.png">
-
-## 서비스 링크
-(서비스 중지) https://healthier.cf/
